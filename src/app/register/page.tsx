@@ -1,20 +1,30 @@
-import Link from "next/link";
 import React from "react";
 
-const Login = () => {
+const Register = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="card w-96 bg-white shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-center mx-auto">Login</h2>
+          <h2 className="card-title text-center mx-auto">Register</h2>
           <form>
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Email atau Username</span>
+                <span className="label-text">Username</span>
               </label>
               <input
                 type="text"
-                placeholder="Masukkan email atau username"
+                placeholder="Masukkan username"
+                className="input input-bordered"
+                required
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Email</span>
+              </label>
+              <input
+                type="email"
+                placeholder="Masukkan email"
                 className="input input-bordered"
                 required
               />
@@ -30,20 +40,15 @@ const Login = () => {
                 required
               />
             </div>
-            <div className="flex justify-between text-sm mt-2">
-              <Link href="/forgotpassword" className="text-blue-500">
-                Lupa Password?
-              </Link>
-            </div>
             <div className="form-control mt-4">
-              <button className="btn btn-primary">Login</button>
+              <button className="btn btn-primary">Register</button>
             </div>
           </form>
           <p className="text-center text-sm mt-2">
-            Belum punya akun?{" "}
-            <Link href="/register" className="text-blue-500">
-              Daftar
-            </Link>
+            Sudah punya akun?{" "}
+            <a href="/login" className="text-blue-500">
+              Login
+            </a>
           </p>
         </div>
       </div>
@@ -51,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
