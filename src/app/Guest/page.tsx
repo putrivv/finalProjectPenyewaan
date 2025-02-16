@@ -30,9 +30,11 @@ const Guest = () => {
             <p className="mt-4 text-gray-600 text-lg">
               Discover the best services and experience the future with us.
             </p>
-            <button className="mt-6 px-6 py-3 bg-[#B9E5E8] text-gray-800 font-semibold rounded-lg shadow-md hover:bg-teal-600">
-              Lihat Barang
-            </button>
+            <Link href="/listbarang">
+              <button className="mt-6 px-6 py-3 bg-[#B9E5E8] text-gray-800 font-semibold rounded-lg shadow-md hover:bg-teal-600">
+                Lihat Barang
+              </button>
+            </Link>
           </div>
           <div className="ml-24 mb-20 md:w-1/2 flex justify-center">
             <img src="/hero-image.svg" alt="Hero Illustration" className="w-80 md:w-full" />
