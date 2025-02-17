@@ -1,61 +1,106 @@
-import React from "react";
+"use client";
+import { useState } from "react";
+import { registerUser } from "@/app/utils/api"; // Sesuaikan path-nya
 
-const Register = () => {
+export default function RegisterPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await registerUser(formData);
+      console.log("Registrasi berhasil:", response);
+      setSuccess(true);
+    } catch (error) {
+      console.error("Registrasi gagal:", error);
+      setError("Registrasi gagal. Silakan coba lagi.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#DFF2EB]">
-      <div className="card w-96 bg-white shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title text-center mx-auto text-[#050315]">Register</h2>
-          <form>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-[#050315]">Username</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Masukkan username"
-                className="input input-bordered border-[#4A628A] focus:border-[#7AB2D3] focus:outline-none"
-                required
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-[#050315]">Email</span>
-              </label>
-              <input
-                type="email"
-                placeholder="Masukkan email"
-                className="input input-bordered border-[#4A628A] focus:border-[#7AB2D3] focus:outline-none"
-                required
-              />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-[#050315]">Password</span>
-              </label>
-              <input
-                type="password"
-                placeholder="Masukkan password"
-                className="input input-bordered border-[#4A628A] focus:border-[#7AB2D3] focus:outline-none"
-                required
-              />
-            </div>
-            <div className="form-control mt-4">
-              <button className="btn bg-[#B9E5E8] text-[#050315] border-none hover:bg-[#7AB2D3]">
-                Register
-              </button>
-            </div>
-          </form>
-          <p className="text-center text-sm mt-2 text-[#050315]">
-            Sudah punya akun?{" "}
-            <a href="/login" className="text-[#7AB2D3] hover:text-[#4A628A]">
-              Login
-            </a>
-          </p>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Daftar Akun Baru</h1>
+      {success && (
+        <div className="bg-green-100 text-green-700 p-4 rounded-md mb-4">
+          Registrasi berhasil! Silakan login.
         </div>
-      </div>
+      )}
+      {error && (
+        <div className="bg-red-100 text-red-700 p-4 rounded-md mb-4">
+          {error}
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Nama</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Konfirmasi Password</label>
+          <input
+            type="password"
+            name="password_confirmation"
+            value={formData.password_confirmation}
+            onChange={handleChange}
+            className="w-full p-2 border rounded-md"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-600"
+        >
+          {loading ? "Memproses..." : "Daftar"}
+        </button>
+      </form>
     </div>
   );
-};
-
-export default Register;
+}

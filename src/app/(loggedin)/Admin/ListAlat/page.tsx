@@ -1,26 +1,41 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 
 interface Item {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  available: boolean;
+  alat_id: number;
+  alat_nama: string;
+  alat_kategori_id: number;
+  alat_hargaPerhari: number;
+  alat_stok: number;
 }
 
 export default function RentalListPage() {
   const [search, setSearch] = useState("");
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch("/api/alat"); 
+        // Menggunakan relative path '/api/alat' untuk memanfaatkan proxy
+        const response = await fetch("api/alat");
+
+        // Periksa apakah respons statusnya OK (200)
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data.");
+        }
+
         const data = await response.json();
-        setItems(data);
+
+        // Pastikan data sesuai dengan struktur yang kita harapkan
+        if (Array.isArray(data.data)) {
+          setItems(data.data);
+        } else {
+          throw new Error("Data tidak valid.");
+        }
       } catch (error) {
+        setError("Terjadi kesalahan saat mengambil data.");
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
@@ -28,15 +43,18 @@ export default function RentalListPage() {
     };
 
     fetchItems();
-  }, []);
+  }, []); // Hanya dijalankan sekali saat komponen pertama kali dimuat
 
+  // Filtering items based on the search keyword
   const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
+    item.alat_nama.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="container mx-auto p-6 text-gray-800">
       <h1 className="text-3xl font-bold mb-6">Daftar Barang Penyewaan</h1>
+      
+      {/* Search bar */}
       <input
         type="text"
         placeholder="Cari barang..."
@@ -44,11 +62,21 @@ export default function RentalListPage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      {loading ? (
+
+      {/* Loading or Error message */}
+      {loading && (
         <div className="text-center py-4">
           <span className="loading loading-spinner loading-md"></span>
         </div>
-      ) : (
+      )}
+      {error && (
+        <div className="text-center py-4 text-red-500">
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* Data table */}
+      {!loading && !error && (
         <div className="overflow-x-auto">
           <table className="table w-full border-collapse border border-gray-300">
             <thead className="bg-green-100">
@@ -63,20 +91,20 @@ export default function RentalListPage() {
             <tbody>
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50 transition">
-                    <td className="p-3 border text-center">{item.id}</td>
-                    <td className="p-3 border">{item.name}</td>
-                    <td className="p-3 border text-center">{item.category}</td>
+                  <tr key={item.alat_id} className="hover:bg-gray-50 transition">
+                    <td className="p-3 border text-center">{item.alat_id}</td>
+                    <td className="p-3 border">{item.alat_nama}</td>
+                    <td className="p-3 border text-center">{item.alat_kategori_id}</td>
                     <td className="p-3 border text-center font-medium">
-                      {item.price.toLocaleString()}
+                      {item.alat_hargaPerhari.toLocaleString()}
                     </td>
                     <td className="p-3 border text-center">
                       <span
                         className={`px-3 py-1 rounded-md text-white text-sm font-medium ${
-                          item.available ? "bg-green-500" : "bg-red-500"
+                          item.alat_stok > 0 ? "bg-green-500" : "bg-red-500"
                         }`}
                       >
-                        {item.available ? "Tersedia" : "Tidak Tersedia"}
+                        {item.alat_stok > 0 ? "Tersedia" : "Tidak Tersedia"}
                       </span>
                     </td>
                   </tr>
