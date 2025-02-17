@@ -1,20 +1,23 @@
 "use client"; // Wajib karena ada useState & React Query
+
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
+import ReactDOM from "react-dom"; // Untuk React Portal
 import { loginUser } from "@/app/utils/api";
 
 const Login = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk modal
 
   const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
       if (data.access_token) {
         localStorage.setItem("access_token", data.access_token);
-        router.push("/Admin/ListAlat");
+        setIsModalOpen(true); // Buka modal setelah login berhasil
       }
     },
     onError: () => {
@@ -29,6 +32,11 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     mutation.mutate(formData); // Panggil API login
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Tutup modal
+    router.push("/Admin/ListAlat"); // Redirect ke halaman admin
   };
 
   return (
@@ -87,6 +95,30 @@ const Login = () => {
           </p>
         </div>
       </div>
+
+      {/* Modal (Portal) */}
+      {isModalOpen &&
+        ReactDOM.createPortal(
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+              <h3 className="text-lg font-bold text-[#050315] mb-4">
+                Login Berhasil
+              </h3>
+              <p className="text-[#050315] mb-4">
+                Anda akan dialihkan ke halaman admin.
+              </p>
+              <div className="flex justify-end">
+                <button
+                  className="btn bg-[#B9E5E8] text-[#050315] border-none hover:bg-[#7AB2D3] transition duration-300 ease-in-out"
+                  onClick={closeModal}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
