@@ -9,7 +9,7 @@ import {
 
 const Sidebar = () => {
   return (
-    <div className="h-screen w-64 bg-white p-4 flex flex-col border-t-4 border-[#d1fae5]">
+    <div className="h-screen w-64 shadow bg-white p-4 flex flex-col border-t-4 border-[#d1fae5]">
       {/* Header */}
       <h1 className="text-xl font-bold mb-6 text-[#050315] text-center">
         ADMIN
@@ -60,7 +60,7 @@ const Sidebar = () => {
             className="flex items-center py-4 px-4 rounded-lg text-[#050315] hover:bg-green-100 hover:text-[#050315] transition duration-300 ease-in-out"
           >
             <FaUsers className="mr-2" />
-            Pelanggan
+            Daftar Pelanggan
           </Link>
         </li>
       </ul>
