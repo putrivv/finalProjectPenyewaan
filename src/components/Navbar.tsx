@@ -10,9 +10,32 @@ export default function Navbar() {
       </div>
       <div className="hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-gray-800">
-          <li><Link href="/about">About</Link></li>
-          <li><Link href="/login">Login</Link></li>
-          <li><Link href="/register">Regster</Link></li>
+          <li>
+            <Link 
+              href="/about" 
+              className="btn btn-ghost mr-4" // Menambahkan kelas btn btn-ghost dan margin-right
+            >
+              About
+            </Link>
+          </li>
+          <li>
+            <Link 
+              href="/login" 
+              style={{ backgroundColor: '#c0dee3' }} 
+              className="btn btn-ghost mr-4" // Menambahkan margin-right
+            >
+              Login
+            </Link>
+          </li>
+          <li>
+            <Link 
+              href="/register" 
+              style={{ backgroundColor: '#B9E5E8' }} 
+              className="btn btn-ghost"
+            >
+              Register
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
