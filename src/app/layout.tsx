@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer";
+
 import "./globals.css";
 import QueryProvider from "./providers/QueryProvider";
 
@@ -8,7 +8,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
       <QueryProvider>
-        <main className="p-4">{children}</main>
+        <main className="bg-white">{children}</main>
         </QueryProvider>
       </body>
     </html>

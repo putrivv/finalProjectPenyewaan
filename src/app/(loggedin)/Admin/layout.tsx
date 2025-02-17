@@ -6,13 +6,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryProvider>
     <div className="flex flex-col min-h-screen">
-      {/* Container untuk Sidebar dan Main Content */}
       <div className="flex flex-1">
         <Sidebar />
         <main className="flex-1 p-4">{children}</main>
       </div>
-
-      {/* Footer */}
       <Footer />
     </div>
     </QueryProvider>

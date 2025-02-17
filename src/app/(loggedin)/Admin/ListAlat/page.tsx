@@ -53,7 +53,7 @@ export default function RentalListPage() {
   return (
     <div className="container mx-auto p-6 text-gray-800">
       <h1 className="text-3xl font-bold mb-6">Daftar Barang Penyewaan</h1>
-      
+
       {/* Search bar */}
       <input
         type="text"
@@ -91,10 +91,15 @@ export default function RentalListPage() {
             <tbody>
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
-                  <tr key={item.alat_id} className="hover:bg-gray-50 transition">
+                  <tr
+                    key={item.alat_id}
+                    className="hover:bg-gray-50 transition"
+                  >
                     <td className="p-3 border text-center">{item.alat_id}</td>
                     <td className="p-3 border">{item.alat_nama}</td>
-                    <td className="p-3 border text-center">{item.alat_kategori_id}</td>
+                    <td className="p-3 border text-center">
+                      {item.alat_kategori_id}
+                    </td>
                     <td className="p-3 border text-center font-medium">
                       {item.alat_hargaPerhari.toLocaleString()}
                     </td>

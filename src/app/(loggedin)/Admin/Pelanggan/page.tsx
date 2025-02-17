@@ -16,7 +16,7 @@ export default function ListPelangganPage() {
   useEffect(() => {
     const fetchPelanggan = async () => {
       try {
-        const response = await fetch("/api/pelanggan"); // Ganti endpoint sesuai API pelanggan
+        const response = await fetch("/api/pelanggan"); 
         const data = await response.json();
         setPelanggan(data);
       } catch (error) {

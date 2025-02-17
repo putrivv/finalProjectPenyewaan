@@ -12,7 +12,7 @@ const Sidebar = () => {
     <div className="h-screen w-64 shadow bg-white p-4 flex flex-col border-t-4 border-[#d1fae5]">
       {/* Header */}
       <h1 className="text-xl font-bold mb-6 text-[#050315] text-center">
-        ADMIN
+        BEAR RENTAL
       </h1>
       <hr className="border-t-2 border-[#d1fae5] mb-4" />
       {/* Menu List */}

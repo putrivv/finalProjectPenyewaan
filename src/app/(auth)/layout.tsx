@@ -3,10 +3,5 @@ export default function LoginLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div>
-      {/* Layout khusus untuk login */}
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 }
