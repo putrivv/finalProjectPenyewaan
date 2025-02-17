@@ -36,7 +36,7 @@ const Login = () => {
 
   const closeModal = () => {
     setIsModalOpen(false); // Tutup modal
-    router.push("/Admin/ListAlat"); // Redirect ke halaman admin
+    router.push("/Admin/Beranda"); // Redirect ke halaman admin
   };
 
   return (
