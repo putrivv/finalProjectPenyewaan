@@ -37,7 +37,7 @@ const Guest = () => {
             </Link>
           </div>
           <div className="ml-24 mb-20 md:w-1/2 flex justify-center">
-            <img src="/hero-image.svg" alt="Hero Illustration" className="w-80 md:w-full" />
+            <img src="/logoo.png" alt="Hero Illustration" className="w-80 md:w-full" />
           </div>
         </div>
       </main>
