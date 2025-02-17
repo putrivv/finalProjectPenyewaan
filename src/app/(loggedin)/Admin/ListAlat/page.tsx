@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useState, useEffect } from "react";
 
 interface Item {
@@ -18,7 +17,7 @@ export default function RentalListPage() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await fetch("/api/items");
+        const response = await fetch("/api/alat"); 
         const data = await response.json();
         setItems(data);
       } catch (error) {
