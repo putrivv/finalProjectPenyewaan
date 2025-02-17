@@ -1,8 +1,10 @@
+import QueryProvider from "@/app/providers/QueryProvider";
 import Footer from "@/components/Footer";
 import Sidebar from "@/components/Sidebar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
+    <QueryProvider>
     <div className="flex flex-col min-h-screen">
       {/* Container untuk Sidebar dan Main Content */}
       <div className="flex flex-1">
@@ -13,6 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       {/* Footer */}
       <Footer />
     </div>
+    </QueryProvider>
   );
 };
 
