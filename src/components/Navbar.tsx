@@ -11,8 +11,8 @@ export default function Navbar() {
       <div className="hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-gray-800">
           <li><Link href="/about">About</Link></li>
-          <li><Link href="/">Services</Link></li>
-          <li><Link href="/">Contact</Link></li>
+          <li><Link href="/login">Login</Link></li>
+          <li><Link href="/register">Regster</Link></li>
         </ul>
       </div>
     </div>
