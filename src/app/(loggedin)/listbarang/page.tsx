@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 const EquipmentCard = ({ name, stock, price, category }) => {
