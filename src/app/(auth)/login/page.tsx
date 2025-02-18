@@ -46,7 +46,9 @@ const Login = () => {
     <div className="flex min-h-screen items-center justify-center bg-[#DFF2EB]">
       <div className="card w-96 bg-white shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-center mx-auto text-[#050315]">Login</h2>
+          <h2 className="card-title text-center mx-auto text-[#050315]">
+            Login
+          </h2>
           {mutation.isError && (
             <p className="text-red-500 text-center">Login gagal</p>
           )}
@@ -97,6 +99,14 @@ const Login = () => {
                 value={formData.admin_password}
                 onChange={handleChange}
               />
+              <div className="text-right mt-1">
+                <Link
+                  href="/forgotpassword"
+                  className="text-sm text-[#7AB2D3] hover:text-[#4A628A]"
+                >
+                  Lupa password?
+                </Link>
+              </div>
             </div>
 
             {/* Tombol Submit */}
@@ -115,7 +125,10 @@ const Login = () => {
           {/* Link untuk Register */}
           <p className="text-center text-sm mt-2 text-[#050315]">
             Belum punya akun?{" "}
-            <Link href="/register" className="text-[#7AB2D3] hover:text-[#4A628A]">
+            <Link
+              href="/register"
+              className="text-[#7AB2D3] hover:text-[#4A628A]"
+            >
               Daftar
             </Link>
           </p>
