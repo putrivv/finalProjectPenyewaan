@@ -2,7 +2,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { getAlat } from "@/app/utils/api"; // Sesuaikan path ke file api.ts
-import { Item } from "@/app/(loggedin)/Admin/ListAlat/types"; // Impor tipe Item dari file types.ts
+import { Item } from "@/app/(loggedin)/Admin/ListAlat/ListAlat.types"; // Impor tipe Item dari file types.ts
 
 export default function RentalListPage() {
   const [search, setSearch] = useState("");

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "proxy": "https://api-penyewaan.aran8276.site"
+    "proxy": ""
   },
   "dependencies": {
     "@tanstack/react-query": "^5.66.3",
