@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 const EquipmentCard = ({ name, stock, price, category }) => {
   return (
@@ -26,16 +27,32 @@ const EquipmentCard = ({ name, stock, price, category }) => {
 };
 
 const EquipmentList = () => {
+  const router = useRouter(); // Inisialisasi useRouter
   const equipment = [
     { name: "Bor Listrik", stock: 5, price: "Rp 750.000", category: "Peralatan Listrik" },
     { name: "Gergaji Mesin", stock: 3, price: "Rp 1.200.000", category: "Peralatan Kayu" },
   ];
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center p-8 bg-gray-100 min-h-screen">
-      {equipment.map((item, index) => (
-        <EquipmentCard key={index} {...item} />
-      ))}
+    <div className="flex flex-col items-center p-8 bg-[#DFF2EB] min-h-screen">
+      {/* Container untuk tombol "Kembali" */}
+      <div className="w-full max-w-6xl px-4"> {/* Tambahkan container dengan lebar maksimal dan padding */}
+        <button
+          onClick={() => router.back()} // Fungsi untuk kembali ke halaman sebelumnya
+          className="mb-8 px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300"
+        >
+          Kembali
+        </button>
+      </div>
+
+      {/* Daftar Equipment */}
+      <div className="w-full max-w-6xl px-4"> {/* Container untuk daftar peralatan */}
+        <div className="flex flex-wrap gap-6 justify-center">
+          {equipment.map((item, index) => (
+            <EquipmentCard key={index} {...item} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

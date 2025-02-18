@@ -13,7 +13,7 @@ export default function Navbar() {
           <li>
             <Link 
               href="/about" 
-              className="btn btn-ghost mr-4" // Menambahkan kelas btn btn-ghost dan margin-right
+              className="btn btn-ghost mr-4" 
             >
               About
             </Link>
@@ -22,7 +22,7 @@ export default function Navbar() {
             <Link 
               href="/login" 
               style={{ backgroundColor: '#c0dee3' }} 
-              className="btn btn-ghost mr-4" // Menambahkan margin-right
+              className="btn btn-ghost mr-4" 
             >
               Login
             </Link>
@@ -33,7 +33,7 @@ export default function Navbar() {
               style={{ backgroundColor: '#B9E5E8' }} 
               className="btn btn-ghost"
             >
-              Register
+              Sign In
             </Link>
           </li>
         </ul>

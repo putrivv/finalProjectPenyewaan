@@ -4,12 +4,12 @@ import Navbar from "@/components/Navbar";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-      <div className="min-h-screen">
-        <Navbar />
-        <main className="">{children}</main>
+      <body style={{ backgroundColor: "#DFF2EB" }}>
+        <div className="min-h-screen bg-[#DFF2EB]">
+          <Navbar />
+          <main className="">{children}</main>
+          <Footer /> {/* Pindahkan Footer ke dalam div */}
         </div>
-        <Footer/>
       </body>
     </html>
   );
