@@ -1,39 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
+import { Kategori } from "./kategori.type"; // Import tipe data Kategori
+import { getKategori } from "@/app/utils/api"; // Sesuaikan path sesuai struktur proyek Anda
 
-interface kategori {
-  id: number;
-  name: string;
-  icon?: string; // You can add an icon property if you have icons for each kategori
-}
-
-const Kategori = () => {
-  const [categories, setCategories] = useState<kategori[]>([]);
+const KategoriPage = () => {
+  const [categories, setCategories] = useState<Kategori[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
-          "https://api-penyewaan.aran8276.site/kategori"
-        );
-
-        // Check if the response is OK (status code 200-299)
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        // Parse the JSON response
-        const data = await response.json();
-        console.log("API Response:", data); // Debugging
-
-        // Check if the data is an array
-        if (Array.isArray(data)) {
-          setCategories(data);
-        } else {
-          throw new Error("Invalid data format: Expected an array");
-        }
+        const result = await getKategori(); // Gunakan fungsi getKategori
+        setCategories(result.data);
       } catch (err: any) {
         console.error("Error fetching categories:", err); // Debugging
         setError(err.message || "Gagal mengambil data kategori");
@@ -58,14 +37,13 @@ const Kategori = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {categories.map((kategori) => (
             <div
-              key={kategori.id}
+              key={kategori.kategori_id}
               className="card bg-base-200 shadow-xl p-4 flex flex-col items-center text-center"
             >
               <div className="card-icon mb-2">
-                <span className={`text-3xl ${kategori.icon}`}></span>{" "}
                 {/* Assuming you have icon classes */}
               </div>
-              <h2 className="text-lg font-semibold">{kategori.name}</h2>
+              <h2 className="text-lg font-semibold">{kategori.kategori_nama}</h2>
             </div>
           ))}
         </div>
@@ -74,4 +52,4 @@ const Kategori = () => {
   );
 };
 
-export default Kategori;
+export default KategoriPage;
