@@ -21,8 +21,7 @@ export default function Navbar() {
           <li>
             <Link 
               href="/login" 
-              style={{ backgroundColor: '#c0dee3' }} 
-              className="btn btn-ghost mr-4" 
+              className="btn btn-ghost mr-4 bg-[#c0dee3]" 
             >
               Login
             </Link>
@@ -30,8 +29,7 @@ export default function Navbar() {
           <li>
             <Link 
               href="/register" 
-              style={{ backgroundColor: '#B9E5E8' }} 
-              className="btn btn-ghost"
+              className="btn btn-ghost mr-4 bg-[B9E5E8]"
             >
               Sign In
             </Link>
