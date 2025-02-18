@@ -9,7 +9,7 @@ import {
 
 const Sidebar = () => {
   return (
-    <div className="h-screen w-64 shadow bg-white p-4 flex flex-col border-t-4 border-[#d1fae5]">
+    <div className="h-screen w-64 shadow bg-[white] p-4 flex flex-col border-t-4 border-[#d1fae5]">
       {/* Header */}
       <h1 className="text-xl font-bold mb-6 text-[#050315] text-center">
         BEAR RENTAL

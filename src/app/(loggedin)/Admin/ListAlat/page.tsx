@@ -1,8 +1,9 @@
-// File: /app/dashboard/ListAlat.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { getAlat } from "@/app/utils/api"; // Sesuaikan path ke file api.ts
 import { Item } from "@/app/(loggedin)/Admin/ListAlat/ListAlat.types"; // Impor tipe Item dari file types.ts
+import { FaPlus } from "react-icons/fa"; // Import ikon dari react-icons
+import Link from "next/link";
 
 export default function RentalListPage() {
   const [search, setSearch] = useState("");
@@ -14,7 +15,6 @@ export default function RentalListPage() {
     const fetchItems = async () => {
       try {
         const result = await getAlat();
-
         // Validasi respons API
         if (result.success && Array.isArray(result.data)) {
           // Filter hanya item yang valid
@@ -37,7 +37,6 @@ export default function RentalListPage() {
         setLoading(false);
       }
     };
-
     fetchItems();
   }, []); // Hanya dijalankan sekali saat komponen pertama kali dimuat
 
@@ -49,15 +48,26 @@ export default function RentalListPage() {
   return (
     <div className="container mx-auto p-6 text-gray-800">
       <h1 className="text-3xl font-bold mb-6">Daftar Barang Penyewaan</h1>
+      <hr className="border-t-2 border-[#d1fae5] mb-4" />
 
-      {/* Search bar */}
-      <input
-        type="text"
-        placeholder="Cari barang..."
-        className="input input-bordered w-full mb-4 p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {/* Search Bar and Button Container */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="Cari barang..."
+          className="input input-bordered w-full max-w-md p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {/* Button Tambah Alat */}
+        <Link href="/Admin/AddAlat">
+          <button className="btn flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 ml-4">
+            <FaPlus /> Tambah Alat
+          </button>
+        </Link>
+      </div>
 
       {/* Loading or Error message */}
       {loading && (
@@ -76,10 +86,10 @@ export default function RentalListPage() {
         <div className="overflow-x-auto">
           <table className="table w-full border-collapse border border-gray-300">
             <thead className="bg-green-100">
-              <tr>
+              <tr className="text-center">
                 <th className="p-3 border">ID</th>
-                <th className="p-3 border">Nama</th>
-                <th className="p-3 border">Kategori</th>
+                <th className="p-3 border">Nama Alat</th>
+                <th className="p-3 border">Kategori ID</th>
                 <th className="p-3 border">Harga (IDR)</th>
                 <th className="p-3 border">Status</th>
               </tr>
@@ -87,10 +97,15 @@ export default function RentalListPage() {
             <tbody>
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
-                  <tr key={item.alat_id} className="hover:bg-gray-50 transition">
+                  <tr
+                    key={item.alat_id}
+                    className="hover:bg-gray-50 transition"
+                  >
                     <td className="p-3 border text-center">{item.alat_id}</td>
                     <td className="p-3 border">{item.alat_nama}</td>
-                    <td className="p-3 border text-center">{item.alat_kategori_id}</td>
+                    <td className="p-3 border text-center">
+                      {item.alat_kategori_id}
+                    </td>
                     <td className="p-3 border text-center font-medium">
                       {item.alat_hargaPerhari.toLocaleString()}
                     </td>

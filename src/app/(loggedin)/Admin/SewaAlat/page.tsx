@@ -12,7 +12,10 @@ const SewaAlat = () => {
   return (
     <div className="p-0 max-w-md mx-0 bg-transparent">
       {/* Header */}
-      <h2 className="text-3xl font-bold mb-4 text-[#050315]">Form Penyewaan Alat</h2>
+      <h1 className="text-3xl font-bold mb-4 text-[#050315]">
+        Form Penyewaan Alat
+      </h1>
+      <hr className="border-t-2 border-[#d1fae5] mb-4" />
       {/* Form */}
       <form className="space-y-6 ml-4">
         {/* Nama Barang */}
