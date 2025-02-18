@@ -15,7 +15,9 @@ const Kategori = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://api-penyewaan.aran8276.site/kategori");
+        const response = await fetch(
+          "https://api-penyewaan.aran8276.site/kategori"
+        );
 
         // Check if the response is OK (status code 200-299)
         if (!response.ok) {
