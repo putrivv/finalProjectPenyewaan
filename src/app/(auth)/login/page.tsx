@@ -16,7 +16,7 @@ const Login = () => {
     mutationFn: loginUser,
     onSuccess: (data) => {
       if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("token", data.access_token);
         setIsModalOpen(true); // Buka modal setelah login berhasil
       }
     },

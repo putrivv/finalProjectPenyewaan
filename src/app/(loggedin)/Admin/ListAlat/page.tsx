@@ -1,13 +1,8 @@
+// File: /app/dashboard/ListAlat.tsx
 "use client";
 import { useState, useEffect } from "react";
-
-interface Item {
-  alat_id: number;
-  alat_nama: string;
-  alat_kategori_id: number;
-  alat_hargaPerhari: number;
-  alat_stok: number;
-}
+import { getAlat } from "@/app/utils/api"; // Sesuaikan path ke file api.ts
+import { Item } from "@/app/(loggedin)/Admin/ListAlat/types"; // Impor tipe Item dari file types.ts
 
 export default function RentalListPage() {
   const [search, setSearch] = useState("");
@@ -18,19 +13,20 @@ export default function RentalListPage() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        // Menggunakan relative path '/api/alat' untuk memanfaatkan proxy
-        const response = await fetch("api/alat");
+        const result = await getAlat();
 
-        // Periksa apakah respons statusnya OK (200)
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data.");
-        }
-
-        const data = await response.json();
-
-        // Pastikan data sesuai dengan struktur yang kita harapkan
-        if (Array.isArray(data.data)) {
-          setItems(data.data);
+        // Validasi respons API
+        if (result.success && Array.isArray(result.data)) {
+          // Filter hanya item yang valid
+          const validItems = result.data.filter(
+            (item) =>
+              typeof item.alat_id === "number" &&
+              typeof item.alat_nama === "string" &&
+              typeof item.alat_kategori_id === "number" &&
+              typeof item.alat_hargaPerhari === "number" &&
+              typeof item.alat_stok === "number"
+          );
+          setItems(validItems);
         } else {
           throw new Error("Data tidak valid.");
         }
@@ -91,15 +87,10 @@ export default function RentalListPage() {
             <tbody>
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
-                  <tr
-                    key={item.alat_id}
-                    className="hover:bg-gray-50 transition"
-                  >
+                  <tr key={item.alat_id} className="hover:bg-gray-50 transition">
                     <td className="p-3 border text-center">{item.alat_id}</td>
                     <td className="p-3 border">{item.alat_nama}</td>
-                    <td className="p-3 border text-center">
-                      {item.alat_kategori_id}
-                    </td>
+                    <td className="p-3 border text-center">{item.alat_kategori_id}</td>
                     <td className="p-3 border text-center font-medium">
                       {item.alat_hargaPerhari.toLocaleString()}
                     </td>
