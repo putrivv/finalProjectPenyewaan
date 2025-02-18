@@ -45,7 +45,7 @@ export default function ListPelangganPage() {
         onChange={(e) => setSearch(e.target.value)}
       />
       {loading ? (
-        <div className="text-center py-4">
+        <div className="text-center py-4 bg-white">
           <span className="loading loading-spinner loading-md"></span>
         </div>
       ) : (

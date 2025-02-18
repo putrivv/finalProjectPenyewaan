@@ -83,7 +83,7 @@ export default function RentalListPage() {
 
       {/* Data table */}
       {!loading && !error && (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto bg-white">
           <table className="table w-full border-collapse border border-gray-300">
             <thead className="bg-green-100">
               <tr className="text-center">

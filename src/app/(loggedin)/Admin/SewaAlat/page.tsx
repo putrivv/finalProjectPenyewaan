@@ -10,7 +10,7 @@ const SewaAlat = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="p-0 max-w-md mx-0 bg-transparent">
+    <div className="p-4 max-w-md mx-0 bg-transparent">
       {/* Header */}
       <h1 className="text-3xl font-bold mb-4 text-[#050315]">
         Form Penyewaan Alat
@@ -58,7 +58,7 @@ const SewaAlat = () => {
           <label className="flex items-center gap-2 text-[#050315]">
             <input
               type="checkbox"
-              className="checkbox border-[#d1fae5] checked:bg-[#d1fae5]"
+              className="checkbox border-[#050315] checked:bg-[#d1fae5]"
             />
             Sudah Kembali
           </label>
@@ -68,7 +68,7 @@ const SewaAlat = () => {
           <label className="flex items-center gap-2 text-[#050315]">
             <input
               type="checkbox"
-              className="checkbox border-[#d1fae5] checked:bg-[#d1fae5]"
+              className="checkbox border-[#050315] checked:bg-[#d1fae5]"
             />
             Sudah Dibayar
           </label>

@@ -6,8 +6,8 @@ export default function AddAlat() {
   const [formData, setFormData] = useState({
     alat_id: 0,
     alat_nama: "",
-    alat_kategori_id: 0,
-    alat_hargaPerhari: 0,
+    alat_kategori_id: "",
+    alat_hargaPerhari: "",
     alat_stok: 0,
   });
 
@@ -53,16 +53,20 @@ export default function AddAlat() {
       setFormData({
         alat_id: 0,
         alat_nama: "",
-        alat_kategori_id: 0,
-        alat_hargaPerhari: 0,
+        alat_kategori_id: "",
+        alat_hargaPerhari: "",
         alat_stok: 0,
       });
     } catch (error) {
-      // Tampilkan pesan error
-      setMessage(`Terjadi kesalahan: ${error.message}`);
+      console.error("Error caught:", error); // Opsional: Untuk debugging
+      let errorMessage = "Terjadi kesalahan yang tidak diketahui";
+      if (error instanceof Error) {
+        errorMessage = `Terjadi kesalahan: ${error.message}`;
+      }
+      setMessage(errorMessage);
       setIsError(true);
     }
-  };
+  }
 
   return (
     <div className="p-4">
