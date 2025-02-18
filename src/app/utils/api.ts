@@ -27,7 +27,7 @@ export const loginUser = async (formData: { admin_username: string; admin_email:
 
 // Fungsi untuk forgot password
 export const forgotPassword = async (formData: { email: string }) => {
-  const response = await axios.post("https://api-penyewaan.aran8276.site/api/forgot-password", formData, {
+  const response = await axios.post("https://final-project.aran8276.site/api/reset-password", formData, {
     headers: { "Content-Type": "application/json" },
   });
   return response.data;
