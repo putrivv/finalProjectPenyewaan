@@ -29,7 +29,7 @@ export default function Navbar() {
           <li>
             <Link 
               href="/register" 
-              className="btn btn-ghost mr-4 bg-[B9E5E8]"
+              className="btn btn-ghost mr-4 bg-[#B9E5E8]"
             >
               Sign In
             </Link>
