@@ -1,8 +1,10 @@
 "use client"; // Pastikan ini ada di bagian atas file
 import Link from "next/link";
 import React, { useState } from "react";
+import { forgotPassword } from "@/app/utils/api"; // Sesuaikan path ke file api.ts
 
 const Password = () => {
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
