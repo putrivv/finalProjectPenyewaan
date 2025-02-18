@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,10 +8,9 @@ import { registerUser } from "@/app/utils/api";
 export default function RegisterPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
+    admin_username: "",
+    admin_email: "",
+    admin_password: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,64 +48,56 @@ export default function RegisterPage() {
         <div className="card-body">
           <h2 className="card-title text-center mx-auto text-[#050315]">Daftar</h2>
           {error && <p className="text-red-500 text-center">{error}</p>}
-
           <form onSubmit={handleSubmit}>
+            {/* Input untuk admin_username */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text text-[#050315]">Nama</span>
+                <span className="label-text text-[#050315]">Username</span>
               </label>
               <input
                 type="text"
-                name="name"
-                placeholder="Masukkan nama"
+                name="admin_username"
+                placeholder="Masukkan username"
                 className="input input-bordered border-[#4A628A] focus:border-[#7AB2D3] focus:outline-none"
                 required
-                value={formData.name}
+                value={formData.admin_username}
                 onChange={handleChange}
               />
             </div>
+
+            {/* Input untuk admin_email */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text text-[#050315]">Email</span>
               </label>
               <input
                 type="email"
-                name="email"
+                name="admin_email"
                 placeholder="Masukkan email"
                 className="input input-bordered border-[#4A628A] focus:border-[#7AB2D3] focus:outline-none"
                 required
-                value={formData.email}
+                value={formData.admin_email}
                 onChange={handleChange}
               />
             </div>
+
+            {/* Input untuk admin_password */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text text-[#050315]">Password</span>
               </label>
               <input
                 type="password"
-                name="password"
+                name="admin_password"
                 placeholder="Masukkan password"
                 className="input input-bordered border-[#4A628A] focus:border-[#7AB2D3] focus:outline-none"
                 required
-                value={formData.password}
+                value={formData.admin_password}
                 onChange={handleChange}
               />
             </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-[#050315]">Konfirmasi Password</span>
-              </label>
-              <input
-                type="password"
-                name="password_confirmation"
-                placeholder="Ulangi password"
-                className="input input-bordered border-[#4A628A] focus:border-[#7AB2D3] focus:outline-none"
-                required
-                value={formData.password_confirmation}
-                onChange={handleChange}
-              />
-            </div>
+
+            {/* Tombol Submit */}
             <div className="form-control mt-4">
               <button
                 className={`btn bg-[#B9E5E8] text-[#050315] border-none hover:bg-[#7AB2D3] ${
@@ -120,6 +110,7 @@ export default function RegisterPage() {
             </div>
           </form>
 
+          {/* Link untuk Login */}
           <p className="text-center text-sm mt-2 text-[#050315]">
             Sudah punya akun?{" "}
             <Link href="/login" className="text-[#7AB2D3] hover:text-[#4A628A]">

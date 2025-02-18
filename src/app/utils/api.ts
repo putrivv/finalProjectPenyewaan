@@ -3,21 +3,24 @@ import { Item } from "../(loggedin)/Admin/ListAlat/ListAlat.types";
 import { Kategori } from "../(loggedin)/Admin/Kategori/kategori.type"; // Sesuaikan path sesuai struktur proyek Anda
 
 // Fungsi untuk login
-export const loginUser = async (formData: { email: string; password: string }) => {
-  const response = await axios.post("https://api-penyewaan.aran8276.site/api/login", formData, {
-    headers: { "Content-Type": "application/json" },
-  });
-  return response.data;
-};
+export const loginUser = async (formData: { admin_username: string; admin_email: string; admin_password: string }) => {
+    const response = await axios.post(
+      "https://final-project.aran8276.site/api/login",
+      formData,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  };
 
 // Fungsi untuk registrasi
 export const registerUser = async (formData: { 
-  name: string; 
-  email: string; 
-  password: string; 
-  password_confirmation: string; 
+  admin_username: string; 
+  admin_email: string; 
+  admin_password: string;  
 }) => {
-  const response = await axios.post("https://api-penyewaan.aran8276.site/api/register", formData, {
+  const response = await axios.post("https://final-project.aran8276.site/api/register", formData, {
     headers: { "Content-Type": "application/json" },
   });
   return response.data;
