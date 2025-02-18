@@ -14,17 +14,16 @@ export const loginUser = async (formData: { admin_username: string; admin_email:
     return response.data;
   };
 
-// Fungsi untuk registrasi
-export const registerUser = async (formData: { 
-  admin_username: string; 
-  admin_email: string; 
-  admin_password: string;  
-}) => {
-  const response = await axios.post("https://final-project.aran8276.site/api/register", formData, {
-    headers: { "Content-Type": "application/json" },
-  });
-  return response.data;
-};
+  export const registerUser = async (formData: { 
+    admin_username: string; 
+    admin_email: string; 
+    admin_password: string;  
+  }) => {
+    const response = await axios.post("https://final-project.aran8276.site/api/register", formData, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return response.data;
+  };
 
 // Fungsi untuk forgot password
 export const forgotPassword = async (formData: { email: string }) => {
