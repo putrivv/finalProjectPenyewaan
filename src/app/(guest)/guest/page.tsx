@@ -26,7 +26,7 @@ const Guest = () => {
           </div>
           <div className="ml-24 mb-20 md:w-1/2 flex justify-center">
             <img
-              src="/logoo.png"
+              src="/logo1.png"
               alt="Hero Illustration"
               className="w-80 md:w-full"
             />
