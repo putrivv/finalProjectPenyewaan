@@ -58,3 +58,6 @@ export const getAlat = async (): Promise<{ success: boolean; message: string; da
       throw error;
     }
   };
+
+  //Fungsi untuk form penyewaan
+  
