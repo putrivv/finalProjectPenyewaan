@@ -422,3 +422,29 @@ export const getBarang = async (): Promise<{
     );
   }
 };
+
+
+
+// Fungsi untuk menghapus penyewaan
+export const deletePenyewaan = async (id: number) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+    }
+    const response = await axios.delete(
+      `https://final-project.aran8276.site/api/penyewaan/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting penyewaan:", error);
+    throw error;
+  }
+};
+
