@@ -13,7 +13,6 @@ const AddPelanggan = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
 
-  // Handle perubahan input
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -24,11 +23,9 @@ const AddPelanggan = () => {
     }));
   };
 
-  // Handle submit form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      // Validasi input
       if (
         !formData.pelanggan_nama ||
         !formData.pelanggan_alamat ||
@@ -38,21 +35,17 @@ const AddPelanggan = () => {
         throw new Error("Semua field harus diisi.");
       }
 
-      // Siapkan FormData untuk dikirim
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
         formDataToSend.append(key, value);
       });
 
-      // Kirim data ke server
       const result = await addPelanggan(formDataToSend);
       console.log("Respon dari server:", result);
 
-      // Tampilkan pesan sukses
       setMessage("Data pelanggan berhasil disimpan!");
       setIsError(false);
 
-      // Reset form
       setFormData({
         pelanggan_nama: "",
         pelanggan_alamat: "",
@@ -63,8 +56,6 @@ const AddPelanggan = () => {
       let errorMessage = "Terjadi kesalahan yang tidak diketahui.";
       if (error instanceof Error) {
         errorMessage = error.message;
-
-        // Handle token tidak valid atau kedaluwarsa
         if (
           errorMessage.includes("Akses ditolak") ||
           errorMessage.includes("Token tidak valid")
@@ -80,11 +71,8 @@ const AddPelanggan = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Tambah Pelanggan</h1>
-
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md max-w-lg mx-auto">
-        {/* Nama Pelanggan */}
+      <h1 className="text-3xl font-bold mb-6">Tambah Pelanggan</h1>
+      <form onSubmit={handleSubmit} className="w-full max-w-lg">
         <div className="mb-4">
           <label htmlFor="pelanggan_nama" className="block text-sm font-medium mb-2">
             Nama Pelanggan
@@ -101,7 +89,6 @@ const AddPelanggan = () => {
           />
         </div>
 
-        {/* Alamat Pelanggan */}
         <div className="mb-4">
           <label htmlFor="pelanggan_alamat" className="block text-sm font-medium mb-2">
             Alamat Pelanggan
@@ -117,7 +104,6 @@ const AddPelanggan = () => {
           ></textarea>
         </div>
 
-        {/* Nomor Telepon */}
         <div className="mb-4">
           <label htmlFor="pelanggan_notelp" className="block text-sm font-medium mb-2">
             Nomor Telepon
@@ -134,7 +120,6 @@ const AddPelanggan = () => {
           />
         </div>
 
-        {/* Email Pelanggan */}
         <div className="mb-6">
           <label htmlFor="pelanggan_email" className="block text-sm font-medium mb-2">
             Email Pelanggan
@@ -151,19 +136,13 @@ const AddPelanggan = () => {
           />
         </div>
 
-        {/* Tombol Submit */}
-        <div className="flex justify-end">
-          <button type="submit" className="btn btn-primary">
-            Simpan
-          </button>
+        <div>
+          <button type="submit" className="btn btn-primary">Simpan</button>
         </div>
       </form>
 
-      {/* Pesan Feedback */}
       {message && (
-        <div
-          className={`alert mt-6 ${isError ? "alert-error" : "alert-success"} max-w-lg mx-auto`}
-        >
+        <div className={`alert mt-6 ${isError ? "alert-error" : "alert-success"} w-full max-w-lg`}>
           {message}
         </div>
       )}
