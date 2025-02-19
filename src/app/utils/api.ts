@@ -64,28 +64,28 @@ export const getAlat = async (): Promise<{ success: boolean; message: string; da
 
 // Fungsi untuk mendapatkan data kategori
 export const getKategori = async (): Promise<{ success: boolean; message: string; data: Kategori[] }> => {
-  try {
-    // Ambil token dari local storage (jika diperlukan)
-    const token = localStorage.getItem("token");
-
-    const response = await axios.get("https://api-penyewaan.aran8276.site/api/kategori", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Jika endpoint memerlukan token
-      },
-    });
-
-    // Validasi respons API
-    if (response.data.success && Array.isArray(response.data.data)) {
-      return response.data;
-    } else {
-      throw new Error("Respons API tidak sesuai.");
+    try {
+      // Ambil token dari local storage (jika diperlukan)
+      const token = localStorage.getItem("token");
+  
+      const response = await axios.get("https://final-project.aran8276.site/api/kategori", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Jika endpoint memerlukan token
+        },
+      });
+  
+      // Validasi respons API
+      if (response.data.success && Array.isArray(response.data.data)) {
+        return response.data;
+      } else {
+        throw new Error("Respons API tidak sesuai.");
+      }
+    } catch (error) {
+      console.error("Error fetching kategori:", error);
+      throw error;
     }
-  } catch (error) {
-    console.error("Error fetching kategori:", error);
-    throw error;
-  }
-};
+  };
 
 // Fungsi untuk menambahkan kategori baru
 export const addKategori = async (formData: { kategori_nama: string }) => {
