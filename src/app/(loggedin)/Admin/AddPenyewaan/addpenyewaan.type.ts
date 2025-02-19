@@ -8,6 +8,4 @@ export interface Penyewaan {
     penyewaan_sttspembayaran: string; // Contoh: "Lunas" atau "Belum Lunas"
     penyewaan_sttskembali: string; // Contoh: "Sudah Kembali" atau "Belum Kembali"
     penyewaan_totalharga: number;
-    created_at: string; // Format timestamp: "YYYY-MM-DDTHH:mm:ss.000000Z"
-    updated_at: string; // Format timestamp: "YYYY-MM-DDTHH:mm:ss.000000Z"
   }

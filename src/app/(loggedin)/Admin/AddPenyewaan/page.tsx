@@ -1,177 +1,169 @@
 "use client"; // Menandai komponen ini sebagai Client Component
 import React, { useState } from "react";
-import { addPenyewaan } from "@/app/utils/api"; // Import fungsi addPenyewaan
-import { Penyewaan } from "@/app/(loggedin)/Admin/AddPenyewaan/addpenyewaan.type"; // Import tipe Penyewaan
+import ReactDOM from "react-dom";
 
-const AddAlat = () => {
-  const [formData, setFormData] = useState<Partial<Penyewaan>>({
-    penyewaan_pelanggan_id: 0,
-    penyewaan_tglsewa: "",
-    penyewaan_tglkembali: "",
-    penyewaan_sttspembayaran: "Belum Lunas",
-    penyewaan_sttskembali: "Belum Kembali",
-    penyewaan_totalharga: 0,
+const SewaAlat = ({ onSave }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    namaBarang: "",
+    namaPelanggan: "",
+    tanggalDisewa: "",
+    tanggalKembali: "",
+    sudahKembali: false,
+    sudahDibayar: false,
   });
-  const [message, setMessage] = useState<string | null>(null);
-  const [isError, setIsError] = useState(false);
 
-  // Handler untuk mengubah state saat input berubah
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    // Konversi nilai ke angka untuk field numerik
-    setFormData({
-      ...formData,
-      [name]: name === "penyewaan_pelanggan_id" || name === "penyewaan_totalharga"
-        ? Number(value) // Konversi ke angka untuk field numerik
-        : value,
-    });
+  // Fungsi untuk membuka dan menutup modal
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  // Fungsi untuk menangani perubahan input
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
-  // Handler untuk submit form
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      // Debugging: Cetak payload yang dikirim
-      console.log("Payload yang dikirim:", formData);
-      // Kirim data ke API menggunakan fungsi addPenyewaan
-      const result = await addPenyewaan(formData);
-      console.log("Respon dari server:", result);
-      // Tampilkan pesan sukses
-      setMessage("Data penyewaan berhasil disimpan!");
-      setIsError(false);
-      // Reset form setelah berhasil
-      setFormData({
-        penyewaan_pelanggan_id: 0,
-        penyewaan_tglsewa: "",
-        penyewaan_tglkembali: "",
-        penyewaan_sttspembayaran: "Belum Lunas",
-        penyewaan_sttskembali: "Belum Kembali",
-        penyewaan_totalharga: 0,
-      });
-    } catch (error) {
-      console.error("Error caught:", error);
-      let errorMessage = "Terjadi kesalahan yang tidak diketahui";
-      if (error instanceof Error) {
-        errorMessage = `Terjadi kesalahan: ${error.message}`;
-      }
-      setMessage(errorMessage);
-      setIsError(true);
-    }
+  // Fungsi untuk menangani submit form
+  const handleSubmit = () => {
+    onSave(formData); // Kirim data ke komponen induk melalui prop `onSave`
+    closeModal();
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-lg">
       {/* Header */}
-      <h1 className="text-3xl font-bold mb-4">Form Penyewaan Alat</h1>
-
-      {/* Form Penyewaan */}
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-        {/* Nama Pelanggan */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium">ID Pelanggan</label>
+      <h1 className="text-3xl font-bold mb-4 text-[#050315] text-center">
+        Form Penyewaan Alat
+      </h1>
+      <hr className="border-t-2 border-[#d1fae5] mb-6" />
+      {/* Form */}
+      <form className="space-y-4">
+        {/* Nama Barang */}
+        <div>
+          <label className="block text-sm font-medium text-[#050315] mb-2">
+            Nama Barang
+          </label>
           <input
-            type="number"
-            name="penyewaan_pelanggan_id"
-            value={formData.penyewaan_pelanggan_id}
+            type="text"
+            name="namaBarang"
+            placeholder="Nama Barang"
+            value={formData.namaBarang}
             onChange={handleChange}
-            placeholder="Masukkan ID Pelanggan"
-            className="input input-bordered w-full mt-1"
-            required
+            className="w-full px-4 py-2 border border-[#d1fae5] rounded-md focus:ring-2 focus:ring-[#7AB2D3] focus:border-transparent transition duration-300"
           />
         </div>
-
-        {/* Tanggal Disewa & Tanggal Kembali */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <label className="block text-sm font-medium">Tanggal Disewa</label>
-            <input
-              type="date"
-              name="penyewaan_tglsewa"
-              value={formData.penyewaan_tglsewa}
-              onChange={handleChange}
-              className="input input-bordered w-full mt-1"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Tanggal Kembali</label>
-            <input
-              type="date"
-              name="penyewaan_tglkembali"
-              value={formData.penyewaan_tglkembali}
-              onChange={handleChange}
-              className="input input-bordered w-full mt-1"
-              required
-            />
-          </div>
-        </div>
-
-        {/* Checkbox Sudah Dibayar */}
-        <div className="mb-4">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={formData.penyewaan_sttspembayaran === "Lunas"}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  penyewaan_sttspembayaran: e.target.checked ? "Lunas" : "Belum Lunas",
-                })
-              }
-            />
-            Sudah Dibayar
+        {/* Nama Pelanggan */}
+        <div>
+          <label className="block text-sm font-medium text-[#050315] mb-2">
+            Nama Pelanggan
           </label>
+          <input
+            type="text"
+            name="namaPelanggan"
+            placeholder="Nama Pelanggan"
+            value={formData.namaPelanggan}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-[#d1fae5] rounded-md focus:ring-2 focus:ring-[#7AB2D3] focus:border-transparent transition duration-300"
+          />
         </div>
-
+        {/* Tanggal Disewa & Tanggal Kembali */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-[#050315] mb-2">
+              Tanggal Disewa
+            </label>
+            <input
+              type="date"
+              name="tanggalDisewa"
+              value={formData.tanggalDisewa}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-[#d1fae5] rounded-md focus:ring-2 focus:ring-[#7AB2D3] focus:border-transparent transition duration-300"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-[#050315] mb-2">
+              Tanggal Kembali
+            </label>
+            <input
+              type="date"
+              name="tanggalKembali"
+              value={formData.tanggalKembali}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-[#d1fae5] rounded-md focus:ring-2 focus:ring-[#7AB2D3] focus:border-transparent transition duration-300"
+            />
+          </div>
+        </div>
         {/* Checkbox Sudah Kembali */}
-        <div className="mb-4">
-          <label className="flex items-center gap-2">
+        <div>
+          <label className="flex items-center gap-2 text-sm text-[#050315]">
             <input
               type="checkbox"
-              checked={formData.penyewaan_sttskembali === "Sudah Kembali"}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  penyewaan_sttskembali: e.target.checked ? "Sudah Kembali" : "Belum Kembali",
-                })
-              }
+              name="sudahKembali"
+              checked={formData.sudahKembali}
+              onChange={handleChange}
+              className="rounded border-[#d1fae5] text-[#7AB2D3] focus:ring-[#7AB2D3] focus:ring-offset-2"
             />
             Sudah Kembali
           </label>
         </div>
-
-        {/* Total Harga */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium">Total Harga</label>
-          <input
-            type="number"
-            name="penyewaan_totalharga"
-            value={formData.penyewaan_totalharga}
-            onChange={handleChange}
-            placeholder="Masukkan Total Harga"
-            className="input input-bordered w-full mt-1"
-            required
-          />
+        {/* Checkbox Sudah Dibayar */}
+        <div>
+          <label className="flex items-center gap-2 text-sm text-[#050315]">
+            <input
+              type="checkbox"
+              name="sudahDibayar"
+              checked={formData.sudahDibayar}
+              onChange={handleChange}
+              className="rounded border-[#d1fae5] text-[#7AB2D3] focus:ring-[#7AB2D3] focus:ring-offset-2"
+            />
+            Sudah Dibayar
+          </label>
         </div>
-
         {/* Tombol Simpan */}
-        <div className="flex justify-end gap-4">
-          <button type="submit" className="btn btn-primary">
-            Simpan
-          </button>
-        </div>
+        <button
+          type="button"
+          className="w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-out"
+          onClick={openModal}
+        >
+          Simpan
+        </button>
       </form>
-
-      {/* Pesan Feedback */}
-      {message && (
-        <div className={`alert ${isError ? "alert-error" : "alert-success"} mt-4`}>
-          {message}
-        </div>
-      )}
+      {/* Modal (Portal) */}
+      {isModalOpen &&
+        ReactDOM.createPortal(
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+              <h3 className="text-lg font-bold text-[#050315] mb-4 text-center">
+                Konfirmasi Penyewaan
+              </h3>
+              <p className="text-sm text-[#050315] mb-6 text-center">
+                Apakah Anda yakin ingin menyimpan data penyewaan ini?
+              </p>
+              <div className="flex justify-between space-x-4">
+                <button
+                  type="button"
+                  className="w-full px-4 py-2 bg-gray-300 text-[#050315] font-medium rounded-md hover:bg-gray-400 transition duration-300 ease-in-out"
+                  onClick={closeModal}
+                >
+                  Batal
+                </button>
+                <button
+                  type="button"
+                  className="w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-out"
+                  onClick={handleSubmit}
+                >
+                  Simpan
+                </button>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 };
 
-export default AddAlat;
+export default SewaAlat;
