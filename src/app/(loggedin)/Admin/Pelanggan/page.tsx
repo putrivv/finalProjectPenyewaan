@@ -69,7 +69,12 @@ export default function ListPelangganPage() {
       </div>
 
       {/* Loading or Error message */}
-      {loading && <p>Loading...</p>}
+      {loading && (
+        <div className="flex justify-center items-center min-h-screen">
+          <span className="loading loading-bars loading-xs"></span>
+        </div>
+      )}
+
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Data table */}

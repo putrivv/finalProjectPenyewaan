@@ -25,10 +25,13 @@ const ConfirmationModal = ({
       {/* Modal Box */}
       <div className="relative p-6 bg-white rounded-lg shadow-lg text-center max-w-md w-full">
         {/* Header */}
-        <h2 className="text-lg font-bold text-gray-800 mb-4">Konfirmasi Penghapusan</h2>
+        <h2 className="text-lg font-bold text-gray-800 mb-4">
+          Konfirmasi Penghapusan
+        </h2>
         {/* Pesan */}
         <p className="text-sm text-gray-600 mb-6">
-          Apakah Anda yakin ingin menghapus barang ini? Tindakan ini tidak dapat dibatalkan.
+          Apakah Anda yakin ingin menghapus barang ini? Tindakan ini tidak dapat
+          dibatalkan.
         </p>
         {/* Tombol Aksi */}
         <div className="flex justify-center gap-4">
@@ -56,7 +59,10 @@ export default function RentalListPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [deleteModal, setDeleteModal] = useState<{ isOpen: boolean; id?: number }>({ isOpen: false });
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    id?: number;
+  }>({ isOpen: false });
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -108,7 +114,7 @@ export default function RentalListPage() {
 
   return (
     <div className="p-4">
-      <h1 className="text-3xl font-bold">Daftar Barang Penyewaan</h1>
+      <h1 className="text-3xl font-bold">Daftar Alat</h1>
 
       {/* Search Bar and Button Container */}
       <div className="flex justify-between items-center mt-4">
@@ -129,7 +135,12 @@ export default function RentalListPage() {
       </div>
 
       {/* Loading or Error message */}
-      {loading && <p>Loading...</p>}
+      {loading && (
+        <div className="flex justify-center items-center min-h-screen">
+          <span className="loading loading-bars loading-xs"></span>
+        </div>
+      )}
+
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Data table */}
@@ -141,6 +152,7 @@ export default function RentalListPage() {
               <th>Nama Alat</th>
               <th>Kategori</th>
               <th>Harga (IDR)</th>
+              <th>Stok</th>
               <th>Status</th>
               <th>Aksi</th>
             </tr>
@@ -153,6 +165,7 @@ export default function RentalListPage() {
                   <td>{item.alat_nama}</td>
                   <td>{item.kategori?.kategori_nama || "Tidak Diketahui"}</td>
                   <td>{item.alat_hargaperhari.toLocaleString()}</td>
+                  <td>{item.alat_stok}</td>
                   <td>
                     <span
                       className={`badge ${
@@ -174,7 +187,9 @@ export default function RentalListPage() {
                       {/* Delete Button */}
                       <button
                         className="btn btn-sm btn-error"
-                        onClick={() => setDeleteModal({ isOpen: true, id: item.alat_id })}
+                        onClick={() =>
+                          setDeleteModal({ isOpen: true, id: item.alat_id })
+                        }
                       >
                         <FaTrash className="text-sm" />
                       </button>
@@ -184,7 +199,7 @@ export default function RentalListPage() {
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center">
+                <td colSpan={7} className="text-center">
                   Tidak ada barang ditemukan
                 </td>
               </tr>
