@@ -9,30 +9,24 @@ interface Kategori {
 }
 
 const BarangCard: React.FC<ListBarang> = React.memo(
-  ({
-    alat_id,
-    alat_nama,
-    alat_deskripsi,
-    alat_stok,
-    alat_hargaperhari,
-    kategori_nama,
-  }) => {
+  ({ alat_nama, alat_deskripsi, alat_stok, alat_hargaperhari }) => {
     return (
-      <div className="relative bg-white border border-gray-200 shadow-md rounded-2xl overflow-hidden flex flex-col h-full hover:shadow-xl hover:scale-105 transition-all duration-300 p-4 min-w-[280px] min-h-[320px]">
-        <h2 className="text-lg font-bold text-gray-900">{alat_nama}</h2>
-        <p className="text-sm font-medium text-indigo-600">{kategori_nama}</p>
-        <p className="text-sm text-gray-600 line-clamp-2">
+      <div className="relative bg-white border border-gray-200 shadow-md rounded-xl flex flex-col w-[260px] h-auto hover:shadow-xl hover:scale-105 transition-all duration-300 p-5 overflow-hidden">
+        {/* Nama Barang */}
+        <h2 className="text-lg font-semibold text-gray-900 truncate">{alat_nama}</h2>
+
+        {/* Deskripsi */}
+        <p className="text-sm text-gray-600 mt-2 line-clamp-2">
           {alat_deskripsi ?? "Deskripsi tidak tersedia"}
         </p>
-        <div className="mt-auto text-sm text-gray-700">
+
+        {/* Footer: Stok & Harga */}
+        <div className="mt-4 flex flex-col gap-1 text-gray-700 text-sm">
           <p>
-            Stok:{" "}
-            <span className="font-semibold">
-              {alat_stok ?? "Tidak tersedia"}
-            </span>
+            <span className="font-medium">Stok:</span> {alat_stok ?? "Tidak tersedia"}
           </p>
           <p>
-            Harga per hari:{" "}
+            <span className="font-medium">Harga per hari:</span>{" "}
             <span className="text-emerald-600 font-semibold">
               Rp {alat_hargaperhari ?? "Tidak tersedia"}
             </span>
@@ -42,6 +36,11 @@ const BarangCard: React.FC<ListBarang> = React.memo(
     );
   }
 );
+
+
+
+
+
 
 const BarangList: React.FC = () => {
   const [barang, setBarang] = useState<ListBarang[]>([]);
@@ -106,7 +105,7 @@ const BarangList: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-8 bg-[#DFF2EB] min-h-screen">
+    <div className="flex flex-col items-center py-8 px-4 bg-gradient-to-br from-[#E8F8F5] to-[#DFF2EB] min-h-screen">
       <div className="mb-6">
         <label htmlFor="kategori" className="mr-2 font-semibold text-gray-700">
           Filter Kategori:
@@ -115,7 +114,7 @@ const BarangList: React.FC = () => {
           id="kategori"
           value={kategori}
           onChange={handleKategoriChange}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white shadow-sm transition-all"
         >
           <option value="">Semua Kategori</option>
           {kategoriList.map((item) => (
@@ -126,21 +125,25 @@ const BarangList: React.FC = () => {
         </select>
       </div>
 
-      {loadingBarang || loadingKategori ? (
+      {/* Loading Animation */}
+      {(loadingBarang || loadingKategori) && (
         <div className="flex justify-center items-center min-h-screen">
-          <span className="loading loading-bars loading-xs" aria-label="Loading"></span>
+          <span className="loading loading-bars loading-xs animate-pulse"></span>
         </div>
-      ) : null}
-      {error && <p className="text-red-600">Error: {error}</p>}
+      )}
+      {error && <p className="text-red-600">{error}</p>}
 
-      <div className="w-full max-w-6xl px-4">
-        <div className="flex flex-wrap gap-6 justify-center">
+      {/* Barang Grid */}
+      <div className="w-full max-w-7xl px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 justify-center">
           {barang.length > 0
             ? barang.map((item, index) => (
                 <BarangCard key={item.alat_id ?? index} {...item} />
               ))
             : !loadingBarang && (
-                <p className="text-gray-500">Tidak ada barang tersedia.</p>
+                <p className="text-gray-500 text-center col-span-full">
+                  Tidak ada barang tersedia.
+                </p>
               )}
         </div>
       </div>
