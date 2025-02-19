@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa"; // Import ikon dari react-icons
 import Link from "next/link";
-import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type";
+import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type"; // Import tipe Pelanggan
 import { getPelanggan } from "@/app/utils/api"; // Import fungsi getPelanggan
 
 export default function ListPelangganPage() {
@@ -15,7 +15,6 @@ export default function ListPelangganPage() {
     const fetchPelanggan = async () => {
       try {
         const result = await getPelanggan(); // Menggunakan fungsi getPelanggan
-
         // Validasi respons API
         if (result.success && Array.isArray(result.data)) {
           // Filter hanya pelanggan yang valid
@@ -24,7 +23,7 @@ export default function ListPelangganPage() {
               typeof item.pelanggan_id === "number" &&
               typeof item.pelanggan_nama === "string" &&
               typeof item.pelanggan_alamat === "string" &&
-              typeof item.pelanggan_notelp === "number" &&
+              typeof item.pelanggan_notelp === "string" && // Sesuaikan dengan tipe data API
               typeof item.pelanggan_email === "string"
           );
           setPelanggan(validPelanggan);
@@ -38,7 +37,6 @@ export default function ListPelangganPage() {
         setLoading(false);
       }
     };
-
     fetchPelanggan();
   }, []);
 
@@ -61,6 +59,7 @@ export default function ListPelangganPage() {
           onChange={(e) => setSearch(e.target.value)}
           className="input input-bordered w-full max-w-xs"
         />
+
         {/* Button Tambah Pelanggan */}
         <Link href="/Admin/AddPelanggan">
           <button className="btn btn-primary flex items-center gap-2">
