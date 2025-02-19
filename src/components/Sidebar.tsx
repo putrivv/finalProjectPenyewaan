@@ -42,7 +42,7 @@ const Sidebar = () => {
             className="flex items-center py-4 px-4 rounded-lg text-[#050315] hover:bg-green-100 hover:text-[#050315] transition duration-300 ease-in-out"
           >
             <FaTools className="mr-2" />
-            Daftar Alat
+            Alat
           </Link>
         </li>
         <li>
@@ -60,7 +60,7 @@ const Sidebar = () => {
             className="flex items-center py-4 px-4 rounded-lg text-[#050315] hover:bg-green-100 hover:text-[#050315] transition duration-300 ease-in-out"
           >
             <FaUsers className="mr-2" />
-            Daftar Pelanggan
+            Pelanggan
           </Link>
         </li>
       </ul>
