@@ -61,7 +61,7 @@ export default function RentalListPage() {
         />
 
         {/* Button Tambah Alat */}
-        <Link href="/admin/add-alat">
+        <Link href="/Admin/AddAlat">
           <button className="btn btn-primary flex items-center gap-2">
             <FaPlus /> Tambah Alat
           </button>
