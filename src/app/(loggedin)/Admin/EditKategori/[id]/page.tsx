@@ -62,7 +62,7 @@ export default function EditKategori({}) {
   )}
   <form onSubmit={handleSubmit} className="w-full max-w-lg">
     <div className="space-y-4">
-      <h2 className="text-3xl font-bold">Edit Kategori</h2>
+      <h1 className="text-3xl font-bold">Edit Kategori</h1>
 
       <div>
         <label className="block text-sm font-medium">ID</label>
