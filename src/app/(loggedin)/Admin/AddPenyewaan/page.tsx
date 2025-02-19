@@ -8,7 +8,7 @@ const AddPenyewaanForm = () => {
     penyewaan_pelanggan_id: 0,
     penyewaan_tglsewa: "",
     penyewaan_tglkembali: "",
-    penyewaan_sttspembayaran: "Belum Lunas",
+    penyewaan_sttspembayaran: "Belum Lunas", // Default value
     penyewaan_sttskembali: "Belum Kembali",
     penyewaan_totalharga: 0,
   });
@@ -19,7 +19,6 @@ const AddPenyewaanForm = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
     // Konversi nilai ke angka untuk field numerik
     setFormData({
       ...formData,
@@ -36,10 +35,8 @@ const AddPenyewaanForm = () => {
       // Kirim data ke API menggunakan fungsi addPenyewaan
       const result = await addPenyewaan(formData);
       console.log("Respon dari server:", result);
-
       // Tampilkan pesan sukses
       setMessage("Data penyewaan berhasil disimpan!");
-
       // Reset form setelah berhasil
       setFormData({
         penyewaan_pelanggan_id: 0,
@@ -80,6 +77,7 @@ const AddPenyewaanForm = () => {
             className="w-full px-4 py-2 border border-[#d1fae5] rounded-md focus:ring-2 focus:ring-[#7AB2D3] focus:border-transparent transition duration-300"
           />
         </div>
+
         {/* Tanggal Disewa & Tanggal Kembali */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -107,6 +105,23 @@ const AddPenyewaanForm = () => {
             />
           </div>
         </div>
+
+        {/* Status Pembayaran */}
+        <div>
+          <label className="block text-sm font-medium text-[#050315] mb-2">
+            Status Pembayaran
+          </label>
+          <select
+            name="penyewaan_sttspembayaran"
+            value={formData.penyewaan_sttspembayaran}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-[#d1fae5] rounded-md focus:ring-2 focus:ring-[#7AB2D3] focus:border-transparent transition duration-300"
+          >
+            <option value="Belum Lunas">Belum Lunas</option>
+            <option value="Lunas">Lunas</option>
+          </select>
+        </div>
+
         {/* Total Harga */}
         <div>
           <label className="block text-sm font-medium text-[#050315] mb-2">
@@ -121,6 +136,7 @@ const AddPenyewaanForm = () => {
             className="w-full px-4 py-2 border border-[#d1fae5] rounded-md focus:ring-2 focus:ring-[#7AB2D3] focus:border-transparent transition duration-300"
           />
         </div>
+
         {/* Tombol Simpan */}
         <button
           type="submit"
@@ -129,6 +145,7 @@ const AddPenyewaanForm = () => {
           Simpan
         </button>
       </form>
+
       {/* Pesan Feedback */}
       {message && (
         <p className="mt-4 text-center text-sm text-[#050315]">{message}</p>
