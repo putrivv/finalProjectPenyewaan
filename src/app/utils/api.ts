@@ -221,3 +221,32 @@ export const deleteAlat = async (id: number) => {
     throw error;
   }
 };
+
+//Fungsi Pelanggan
+// Fungsi untuk mengambil data pelanggan dari API
+export const getPelanggan = async (): Promise<{ success: boolean; message: string; data: Pelanggan[] }> => {
+    try {
+      // Ambil token dari local storage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+      }
+  
+      const response = await axios.get("https://final-project.aran8276.site/api/pelanggan", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Sertakan token di header
+        },
+      });
+  
+      // Validasi respons API
+      if (response.data.success && Array.isArray(response.data.data)) {
+        return response.data;
+      } else {
+        throw new Error("Respons API tidak sesuai.");
+      }
+    } catch (error) {
+      console.error("Error fetching pelanggan:", error);
+      throw error;
+    }
+  };
