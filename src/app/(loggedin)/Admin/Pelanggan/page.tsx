@@ -23,7 +23,7 @@ export default function ListPelangganPage() {
               typeof item.pelanggan_id === "number" &&
               typeof item.pelanggan_nama === "string" &&
               typeof item.pelanggan_alamat === "string" &&
-              typeof item.pelanggan_notelp === "string" && // Sesuaikan dengan tipe data API
+              typeof item.pelanggan_notelp === "string" &&
               typeof item.pelanggan_email === "string"
           );
           setPelanggan(validPelanggan);
@@ -46,63 +46,62 @@ export default function ListPelangganPage() {
   );
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold">Daftar Pelanggan</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Daftar Pelanggan</h1>
+      <hr className="border-t-2 border-[#d1fae5] mb-4" />
 
       {/* Search Bar and Button Container */}
-      <div className="flex justify-between items-center mt-4">
-        {/* Search Bar */}
+      <div className="flex items-center justify-between mb-4">
         <input
           type="text"
           placeholder="Cari pelanggan..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full max-w-md p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
         />
-
-        {/* Button Tambah Pelanggan */}
         <Link href="/Admin/AddPelanggan">
-          <button className="btn btn-primary flex items-center gap-2">
+          <button className="btn flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 ml-4">
             <FaPlus /> Tambah Pelanggan
           </button>
         </Link>
       </div>
 
       {/* Loading or Error message */}
-      {loading && (
-        <div className="flex justify-center items-center min-h-screen">
-          <span className="loading loading-bars loading-xs"></span>
-        </div>
-      )}
-
+      {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Data table */}
       {!loading && !error && (
-        <table className="table table-zebra w-full mt-4">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nama</th>
-              <th>Alamat</th>
-              <th>No. Telepon</th>
-              <th>Email</th>
+        <table className="table w-full border-collapse border border-gray-300">
+          <thead className="bg-green-100">
+            <tr className="text-center">
+              <th className="p-3 border">ID</th>
+              <th className="p-3 border">Nama</th>
+              <th className="p-3 border">Alamat</th>
+              <th className="p-3 border">No. Telepon</th>
+              <th className="p-3 border">Email</th>
+              <th className="p-3 border">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {filteredPelanggan.length > 0 ? (
               filteredPelanggan.map((item) => (
-                <tr key={item.pelanggan_id}>
-                  <td>{item.pelanggan_id}</td>
-                  <td>{item.pelanggan_nama}</td>
-                  <td>{item.pelanggan_alamat}</td>
-                  <td>{item.pelanggan_notelp}</td>
-                  <td>{item.pelanggan_email}</td>
+                <tr key={item.pelanggan_id} className="hover:bg-gray-50 transition">
+                  <td className="p-3 border text-center">{item.pelanggan_id}</td>
+                  <td className="p-3 border">{item.pelanggan_nama}</td>
+                  <td className="p-3 border">{item.pelanggan_alamat}</td>
+                  <td className="p-3 border">{item.pelanggan_notelp}</td>
+                  <td className="p-3 border">{item.pelanggan_email}</td>
+                  <td className="p-3 border text-center">
+                    <Link href={`/Admin/DataPelanggan/${item.pelanggan_id}`}>
+                      <button className="btn btn-sm btn-primary">Lihat</button>
+                    </Link>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="text-center">
+                <td colSpan={6} className="p-4 text-center text-gray-500">
                   Tidak ada pelanggan ditemukan
                 </td>
               </tr>

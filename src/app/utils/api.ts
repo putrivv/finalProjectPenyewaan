@@ -5,6 +5,11 @@ import { Alat } from "../(loggedin)/Admin/AddAlat/addalat.type";
 import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type";
 import { Penyewaan } from "../(loggedin)/Admin/SewaAlat/penyewaan.type";
 import { ListBarang } from "../(guest)/listbarang/listbarang.type";
+import { PelangganResponse } from "../(loggedin)/Admin/AddPelanggan/addpelanggan.type";
+
+
+// Endpoint API
+const BASE_URL = "https://final-project.aran8276.site/api";
 
 // Fungsi untuk login
 export const loginUser = async (formData: {
@@ -495,3 +500,63 @@ export const getBarang = async (
     );
   }
 };
+
+
+  export const getDataPelanggan = async (id: number) => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+      }
+  
+      const response = await axios.get(`https://final-project.aran8276.site/api/data_pelanggan/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.data.success && response.data.data) {
+        return response.data.data;
+      } else {
+        throw new Error("Respons API tidak sesuai.");
+      }
+    } catch (error) {
+      console.error("Error fetching data pelanggan:", error);
+      throw error;
+    }
+  };
+
+  // Fungsi untuk menambahkan pelanggan baru
+export const addPelanggan = async (formData: FormData): Promise<PelangganResponse> => {
+    try {
+      // Ambil token dari localStorage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+      }
+  
+      // Kirim permintaan POST ke endpoint /api/pelanggan
+      const response = await axios.post(`${BASE_URL}/pelanggan`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Sesuaikan Content-Type untuk FormData
+          Authorization: `Bearer ${token}`, // Sertakan token di header
+        },
+      });
+  
+      // Validasi respons API
+      if (response.data.success && response.data.data) {
+        return response.data; // Kembalikan data pelanggan
+      } else {
+        throw new Error(response.data.message || "Respons API tidak sesuai.");
+      }
+    } catch (error) {
+      console.error("Error adding pelanggan:", error);
+      if (axios.isAxiosError(error)) {
+        // Tangani error spesifik dari Axios
+        throw new Error(error.response?.data?.message || "Terjadi kesalahan saat menambahkan pelanggan.");
+      } else {
+        throw error; // Lanjutkan error lainnya
+      }
+    }
+  };

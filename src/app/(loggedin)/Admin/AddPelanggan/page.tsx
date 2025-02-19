@@ -1,222 +1,174 @@
 "use client";
-import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { FaUpload } from "react-icons/fa";
+import React, { useState } from "react";
+import { addPelanggan } from "@/app/utils/api";
+import { PelangganInput } from "@/app/(loggedin)/Admin/AddPelanggan/addpelanggan.type";
 
-interface FormData {
-  name: string;
-  address: string;
-  phone: string;
-  email: string;
-  guaranteeType: string;
-  file: FileList;
-}
+const AddPelanggan = () => {
+  const [formData, setFormData] = useState<PelangganInput>({
+    pelanggan_nama: "",
+    pelanggan_alamat: "",
+    pelanggan_notelp: "",
+    pelanggan_email: "",
+  });
+  const [message, setMessage] = useState<string | null>(null);
+  const [isError, setIsError] = useState(false);
 
-export default function AddPelanggan() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
-  const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  // Handle perubahan input
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    setLoading(true);
-    setSuccessMessage(null);
-    setErrorMessage(null);
-
+  // Handle submit form
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
-      // Simulasi pengiriman data ke API
-      const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("address", data.address);
-      formData.append("phone", data.phone);
-      formData.append("email", data.email);
-      formData.append("guaranteeType", data.guaranteeType);
-      formData.append("file", data.file[0]);
-
-      // Kirim data ke server (gunakan endpoint sesuai kebutuhan)
-      const response = await fetch("https://final-project.aran8276.site/api/pelanggan", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Gagal menambahkan pelanggan.");
+      // Validasi input
+      if (
+        !formData.pelanggan_nama ||
+        !formData.pelanggan_alamat ||
+        !formData.pelanggan_notelp ||
+        !formData.pelanggan_email
+      ) {
+        throw new Error("Semua field harus diisi.");
       }
 
-      setSuccessMessage("Pelanggan berhasil ditambahkan!");
+      // Siapkan FormData untuk dikirim
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        formDataToSend.append(key, value);
+      });
+
+      // Kirim data ke server
+      const result = await addPelanggan(formDataToSend);
+      console.log("Respon dari server:", result);
+
+      // Tampilkan pesan sukses
+      setMessage("Data pelanggan berhasil disimpan!");
+      setIsError(false);
+
+      // Reset form
+      setFormData({
+        pelanggan_nama: "",
+        pelanggan_alamat: "",
+        pelanggan_notelp: "",
+        pelanggan_email: "",
+      });
     } catch (error) {
-      setErrorMessage("Terjadi kesalahan saat menambahkan pelanggan.");
-      console.error("Error submitting form:", error);
-    } finally {
-      setLoading(false);
+      let errorMessage = "Terjadi kesalahan yang tidak diketahui.";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+
+        // Handle token tidak valid atau kedaluwarsa
+        if (
+          errorMessage.includes("Akses ditolak") ||
+          errorMessage.includes("Token tidak valid")
+        ) {
+          localStorage.removeItem("accessToken");
+          window.location.href = "/login";
+        }
+      }
+      setMessage(errorMessage);
+      setIsError(true);
     }
   };
 
   return (
-    <div className="container mx-auto p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6">Tambah Pelanggan</h1>
-      <hr className="border-t-2 border-[#d1fae5] mb-4" />
-
-      {/* Success or Error Message */}
-      {successMessage && (
-        <div className="bg-green-100 text-green-800 p-4 rounded-md mb-4">
-          {successMessage}
-        </div>
-      )}
-      {errorMessage && (
-        <div className="bg-red-100 text-red-800 p-4 rounded-md mb-4">
-          {errorMessage}
-        </div>
-      )}
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">Tambah Pelanggan</h1>
 
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Nama */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">
-            Nama
+      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md max-w-lg mx-auto">
+        {/* Nama Pelanggan */}
+        <div className="mb-4">
+          <label htmlFor="pelanggan_nama" className="block text-sm font-medium mb-2">
+            Nama Pelanggan
           </label>
           <input
             type="text"
-            id="name"
-            {...register("name", { required: "Nama wajib diisi." })}
-            className="input input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
+            id="pelanggan_nama"
+            name="pelanggan_nama"
+            value={formData.pelanggan_nama}
+            onChange={handleChange}
+            placeholder="Masukkan Nama Pelanggan"
+            className="input input-bordered w-full"
+            required
           />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-          )}
         </div>
 
-        {/* Alamat */}
-        <div>
-          <label htmlFor="address" className="block text-sm font-medium mb-1">
-            Alamat
+        {/* Alamat Pelanggan */}
+        <div className="mb-4">
+          <label htmlFor="pelanggan_alamat" className="block text-sm font-medium mb-2">
+            Alamat Pelanggan
           </label>
           <textarea
-            id="address"
-            {...register("address", { required: "Alamat wajib diisi." })}
-            className="input input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
+            id="pelanggan_alamat"
+            name="pelanggan_alamat"
+            value={formData.pelanggan_alamat}
+            onChange={handleChange}
+            placeholder="Masukkan Alamat Pelanggan"
+            className="textarea textarea-bordered w-full"
+            required
           ></textarea>
-          {errors.address && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.address.message}
-            </p>
-          )}
         </div>
 
         {/* Nomor Telepon */}
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium mb-1">
+        <div className="mb-4">
+          <label htmlFor="pelanggan_notelp" className="block text-sm font-medium mb-2">
             Nomor Telepon
           </label>
           <input
-            type="tel"
-            id="phone"
-            {...register("phone", {
-              required: "Nomor telepon wajib diisi.",
-              pattern: {
-                value: /^[0-9]{10,15}$/,
-                message: "Nomor telepon tidak valid.",
-              },
-            })}
-            className="input input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
+            type="text"
+            id="pelanggan_notelp"
+            name="pelanggan_notelp"
+            value={formData.pelanggan_notelp}
+            onChange={handleChange}
+            placeholder="Masukkan Nomor Telepon"
+            className="input input-bordered w-full"
+            required
           />
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-          )}
         </div>
 
-        {/* Email */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">
-            Email
+        {/* Email Pelanggan */}
+        <div className="mb-6">
+          <label htmlFor="pelanggan_email" className="block text-sm font-medium mb-2">
+            Email Pelanggan
           </label>
           <input
             type="email"
-            id="email"
-            {...register("email", {
-              required: "Email wajib diisi.",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Format email tidak valid.",
-              },
-            })}
-            className="input input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
+            id="pelanggan_email"
+            name="pelanggan_email"
+            value={formData.pelanggan_email}
+            onChange={handleChange}
+            placeholder="Masukkan Email Pelanggan"
+            className="input input-bordered w-full"
+            required
           />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
         </div>
 
-        {/* Jenis Jaminan */}
-        <div>
-          <label
-            htmlFor="guaranteeType"
-            className="block text-sm font-medium mb-1"
-          >
-            Jenis Jaminan
-          </label>
-          <select
-            id="guaranteeType"
-            {...register("guaranteeType", {
-              required: "Jenis jaminan wajib dipilih.",
-            })}
-            className="input input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
-          >
-            <option value="">Pilih jenis jaminan</option>
-            <option value="KTP">KTP</option>
-            <option value="SIM">SIM</option>
-            <option value="Passport">Passport</option>
-          </select>
-          {errors.guaranteeType && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.guaranteeType.message}
-            </p>
-          )}
-        </div>
-
-        {/* Unggah File */}
-        <div>
-          <label htmlFor="file" className="block text-sm font-medium mb-1">
-            Unggah File Jaminan
-          </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="file"
-              id="file"
-              accept=".pdf,.jpg,.jpeg,.png"
-              {...register("file", {
-                required: "File jaminan wajib diunggah.",
-              })}
-              className="file-input file-input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
-            />
-            <FaUpload className="text-green-500 text-xl" />
-          </div>
-          {errors.file && (
-            <p className="text-red-500 text-sm mt-1">{errors.file.message}</p>
-          )}
-        </div>
-
-        {/* Submit Button */}
+        {/* Tombol Submit */}
         <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className={`btn px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            {loading ? "Menyimpan..." : "Simpan"}
+          <button type="submit" className="btn btn-primary">
+            Simpan
           </button>
         </div>
       </form>
+
+      {/* Pesan Feedback */}
+      {message && (
+        <div
+          className={`alert mt-6 ${isError ? "alert-error" : "alert-success"} max-w-lg mx-auto`}
+        >
+          {message}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default AddPelanggan;
