@@ -3,7 +3,6 @@ import { Item } from "../(loggedin)/Admin/ListAlat/ListAlat.types";
 import { Kategori } from "../(loggedin)/Admin/Kategori/kategori.type"; // Sesuaikan path sesuai struktur proyek Anda
 import { Alat } from "../(loggedin)/Admin/AddAlat/addalat.type";
 import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type";
-import { Penyewaan } from "../(loggedin)/Admin/SewaAlat/penyewaan.type";
 
 // Fungsi untuk login
 export const loginUser = async (formData: {
@@ -20,7 +19,6 @@ export const loginUser = async (formData: {
   );
   return response.data;
 };
-
 export const registerUser = async (formData: {
   admin_username: string;
   admin_email: string;
@@ -35,7 +33,6 @@ export const registerUser = async (formData: {
   );
   return response.data;
 };
-
 // Fungsi untuk forgot password
 export const forgotPassword = async (formData: { email: string }) => {
   const response = await axios.post(
@@ -47,7 +44,6 @@ export const forgotPassword = async (formData: { email: string }) => {
   );
   return response.data;
 };
-
 // Fungsi untuk mendapatkan data alat
 export const getAlat = async (): Promise<{ success: boolean; message: string; data: Item[] }> => {
   try {
@@ -71,7 +67,6 @@ export const getAlat = async (): Promise<{ success: boolean; message: string; da
     throw error;
   }
 };
-
 // Fungsi untuk mendapatkan data kategori
 export const getKategori = async (): Promise<{
   success: boolean;
@@ -96,7 +91,6 @@ export const getKategori = async (): Promise<{
     throw error;
   }
 };
-
 // Fungsi untuk menambahkan kategori baru
 export const addKategori = async (formData: { kategori_nama: string }) => {
   try {
@@ -120,7 +114,6 @@ export const addKategori = async (formData: { kategori_nama: string }) => {
     throw error;
   }
 };
-
 // Fungsi untuk menghapus kategori
 export const deleteKategori = async (id: number) => {
   try {
@@ -143,7 +136,6 @@ export const deleteKategori = async (id: number) => {
     throw error;
   }
 };
-
 // Fungsi Edit Kategori
 export const getKategoriById = async (
   id: number
@@ -165,7 +157,6 @@ export const getKategoriById = async (
     throw error;
   }
 };
-
 export const updateKategori = async (formData: Kategori) => {
   try {
     const token = localStorage.getItem("token");
@@ -185,7 +176,6 @@ export const updateKategori = async (formData: Kategori) => {
     throw error;
   }
 };
-
 // Fungsi untuk menambahkan alat baru
 export const addAlat = async (formData: Alat) => {
   try {
@@ -209,7 +199,6 @@ export const addAlat = async (formData: Alat) => {
     throw error;
   }
 };
-
 // Fungsi untuk menghapus alat
 export const deleteAlat = async (id: number) => {
   try {
@@ -233,67 +222,9 @@ export const deleteAlat = async (id: number) => {
   }
 };
 
+//Fungsi Pelanggan
 // Fungsi untuk mengambil data pelanggan dari API
 export const getPelanggan = async (): Promise<{ success: boolean; message: string; data: Pelanggan[] }> => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
-    }
-
-    const response = await axios.get("https://final-project.aran8276.site/api/pelanggan", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.data.success && Array.isArray(response.data.data)) {
-      return response.data;
-    } else {
-      throw new Error("Respons API tidak sesuai.");
-    }
-  } catch (error) {
-    console.error("Error fetching pelanggan:", error);
-    throw error;
-  }
-};
-
-// Fungsi untuk menambahkan pelanggan baru
-export const addPelanggan = async (formData: Pelanggan) => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
-    }
-
-    const response = await axios.post(
-      "https://final-project.aran8276.site/api/pelanggan",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-<<<<<<< Updated upstream
-    );
-
-    return response.data;
-  } catch (error) {
-    console.error("Error adding pelanggan:", error);
-    throw error;
-  }
-};
-=======
-    } catch (error) {
-      console.error("Error fetching pelanggan:", error);
-      throw error;
-    }
-  };
-
-  // Fungsi untuk menambahkan penyewaan baru
-export const addPenyewaan = async (formData: Partial<Penyewaan>) => {
     try {
       // Ambil token dari local storage
       const token = localStorage.getItem("token");
@@ -301,35 +232,7 @@ export const addPenyewaan = async (formData: Partial<Penyewaan>) => {
         throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
       }
   
-      // Kirim permintaan POST ke endpoint /api/penyewaan
-      const response = await axios.post(
-        "https://final-project.aran8276.site/api/penyewaan",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Sertakan token di header
-          },
-        }
-      );
-  
-      return response.data; // Kembalikan respons dari server
-    } catch (error) {
-      console.error("Error adding penyewaan:", error);
-      throw error;
-    }
-  };
-
-  // Fungsi untuk mendapatkan data penyewaan
-export const getPenyewaan = async (): Promise<{ success: boolean; message: string; data: Penyewaan[] }> => {
-    try {
-      // Ambil token dari local storage
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
-      }
-  
-      const response = await axios.get("https://final-project.aran8276.site/api/penyewaan", {
+      const response = await axios.get("https://final-project.aran8276.site/api/pelanggan", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, // Sertakan token di header
@@ -343,8 +246,7 @@ export const getPenyewaan = async (): Promise<{ success: boolean; message: strin
         throw new Error("Respons API tidak sesuai.");
       }
     } catch (error) {
-      console.error("Error fetching penyewaan:", error);
+      console.error("Error fetching pelanggan:", error);
       throw error;
     }
   };
->>>>>>> Stashed changes
