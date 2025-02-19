@@ -4,6 +4,7 @@ import { Kategori } from "../(loggedin)/Admin/Kategori/kategori.type"; // Sesuai
 import { Alat } from "../(loggedin)/Admin/AddAlat/addalat.type";
 import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type";
 import { Penyewaan } from "../(loggedin)/Admin/SewaAlat/penyewaan.type";
+import { ListBarang } from "../(guest)/listbarang/listbarang.type";
 
 // Fungsi untuk login
 export const loginUser = async (formData: {
@@ -46,18 +47,25 @@ export const forgotPassword = async (formData: { email: string }) => {
   return response.data;
 };
 // Fungsi untuk mendapatkan data alat
-export const getAlat = async (): Promise<{ success: boolean; message: string; data: Item[] }> => {
+export const getAlat = async (): Promise<{
+  success: boolean;
+  message: string;
+  data: Item[];
+}> => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
       throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
     }
-    const response = await axios.get("https://final-project.aran8276.site/api/alat", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      "https://final-project.aran8276.site/api/alat",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.data.success && Array.isArray(response.data.data)) {
       return response.data;
     } else {
@@ -76,12 +84,15 @@ export const getKategori = async (): Promise<{
 }> => {
   try {
     const token = localStorage.getItem("token");
-    const response = await axios.get("https://final-project.aran8276.site/api/kategori", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get(
+      "https://final-project.aran8276.site/api/kategori",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.data.success && Array.isArray(response.data.data)) {
       return response.data;
     } else {
@@ -238,8 +249,6 @@ export const updateAlat = async (id: number, formData: Alat) => {
   }
 };
 
-
-
 // Fungsi untuk menghapus alat
 export const deleteAlat = async (id: number) => {
   try {
@@ -265,85 +274,151 @@ export const deleteAlat = async (id: number) => {
 
 //Fungsi Pelanggan
 // Fungsi untuk mengambil data pelanggan dari API
-export const getPelanggan = async (): Promise<{ success: boolean; message: string; data: Pelanggan[] }> => {
-    try {
-      // Ambil token dari local storage
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
-      }
-  
-      const response = await axios.get("https://final-project.aran8276.site/api/pelanggan", {
+export const getPelanggan = async (): Promise<{
+  success: boolean;
+  message: string;
+  data: Pelanggan[];
+}> => {
+  try {
+    // Ambil token dari local storage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+    }
+
+    const response = await axios.get(
+      "https://final-project.aran8276.site/api/pelanggan",
+      {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, // Sertakan token di header
         },
-      });
-  
-      // Validasi respons API
-      if (response.data.success && Array.isArray(response.data.data)) {
-        return response.data;
-      } else {
-        throw new Error("Respons API tidak sesuai.");
       }
-    } catch (error) {
-      console.error("Error fetching pelanggan:", error);
-      throw error;
-    }
-  };
+    );
 
-  // Fungsi untuk menambahkan penyewaan baru
+    // Validasi respons API
+    if (response.data.success && Array.isArray(response.data.data)) {
+      return response.data;
+    } else {
+      throw new Error("Respons API tidak sesuai.");
+    }
+  } catch (error) {
+    console.error("Error fetching pelanggan:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk menambahkan penyewaan baru
 export const addPenyewaan = async (formData: Partial<Penyewaan>) => {
-    try {
-      // Ambil token dari local storage
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
-      }
-  
-      // Kirim permintaan POST ke endpoint /api/penyewaan
-      const response = await axios.post(
-        "https://final-project.aran8276.site/api/penyewaan",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Sertakan token di header
-          },
-        }
-      );
-  
-      return response.data; // Kembalikan respons dari server
-    } catch (error) {
-      console.error("Error adding penyewaan:", error);
-      throw error;
+  try {
+    // Ambil token dari local storage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
     }
-  };
 
-  // Fungsi untuk mendapatkan data penyewaan
-export const getPenyewaan = async (): Promise<{ success: boolean; message: string; data: Penyewaan[] }> => {
-    try {
-      // Ambil token dari local storage
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
-      }
-  
-      const response = await axios.get("https://final-project.aran8276.site/api/penyewaan", {
+    // Kirim permintaan POST ke endpoint /api/penyewaan
+    const response = await axios.post(
+      "https://final-project.aran8276.site/api/penyewaan",
+      formData,
+      {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`, // Sertakan token di header
         },
-      });
-  
-      // Validasi respons API
-      if (response.data.success && Array.isArray(response.data.data)) {
-        return response.data;
-      } else {
-        throw new Error("Respons API tidak sesuai.");
       }
-    } catch (error) {
-      console.error("Error fetching penyewaan:", error);
-      throw error;
+    );
+
+    return response.data; // Kembalikan respons dari server
+  } catch (error) {
+    console.error("Error adding penyewaan:", error);
+    throw error;
+  }
+};
+
+// Fungsi untuk mendapatkan data penyewaan
+export const getPenyewaan = async (): Promise<{
+  success: boolean;
+  message: string;
+  data: Penyewaan[];
+}> => {
+  try {
+    // Ambil token dari local storage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
     }
-  };
+
+    const response = await axios.get(
+      "https://final-project.aran8276.site/api/penyewaan",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Sertakan token di header
+        },
+      }
+    );
+
+    // Validasi respons API
+    if (response.data.success && Array.isArray(response.data.data)) {
+      return response.data;
+    } else {
+      throw new Error("Respons API tidak sesuai.");
+    }
+  } catch (error) {
+    console.error("Error fetching penyewaan:", error);
+    throw error;
+  }
+};
+
+//List Barang Guest
+export const getBarang = async (): Promise<{
+  success: boolean;
+  message: string;
+  data: ListBarang[];
+}> => {
+  try {
+    // Pastikan localStorage hanya diakses di sisi klien
+    if (typeof window === "undefined") {
+      throw new Error("Fungsi ini hanya dapat dijalankan di sisi klien.");
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+    }
+
+    const response = await fetch("https://final-project.aran8276.site/api/alat", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Gagal mengambil data barang: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+
+    // Validasi respons API
+    if (!data.success || !Array.isArray(data.data)) {
+      throw new Error("Respons API tidak valid atau data tidak ditemukan.");
+    }
+
+    return {
+      success: data.success,
+      message: data.message || "Data berhasil diambil",
+      data: data.data,
+    };
+  } catch (error) {
+    console.error("Error fetching barang:", error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Terjadi kesalahan saat mengambil data barang."
+    );
+  }
+};

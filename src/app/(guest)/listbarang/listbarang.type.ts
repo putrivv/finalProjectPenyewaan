@@ -5,5 +5,4 @@ export interface ListBarang {
     alat_deskripsi: string;
     alat_hargaperhari: number;
     alat_stok: number;
-    alat_gambar: string | null;
 }
