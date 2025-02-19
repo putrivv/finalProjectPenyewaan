@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   return (
-    <div className="navbar bg-[#DFF2EB] border-b border-gray-300 px-40">
+    <div className="navbar bg-[white] border-b border-gray-300 px-40">
       <div className="flex-1">
         <h1 className="text-xl font-bold text-gray-800">
           BEAR RENTAL

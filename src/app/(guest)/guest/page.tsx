@@ -3,7 +3,7 @@ import React from "react";
 
 const Guest = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#DFF2EB]">
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-green-100 to-blue-100">
       <main className="flex-1 flex items-center justify-center h-screen">
         <div className="container mx-auto flex flex-col-reverse md:flex-row items-center px-6 md:px-12">
           {/* Teks Section */}
