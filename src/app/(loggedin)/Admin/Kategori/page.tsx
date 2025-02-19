@@ -155,7 +155,7 @@ const KategoriPage = () => {
 
       {/* Header Section */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Kategori Alat</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Kategori Alat</h1>
         <Link href="/Admin/TambahKategori">
           <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-md shadow-md hover:shadow-lg transition duration-300">
             <FaPlus className="text-xs" /> Tambah Kategori
