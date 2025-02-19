@@ -38,9 +38,12 @@ export default function AddPelanggan() {
       formData.append("file", data.file[0]);
 
       // Kirim data ke server (gunakan endpoint sesuai kebutuhan)
-      const response = await fetch("/api/pelanggan", {
+      const response = await fetch("https://final-project.aran8276.site/api/pelanggan", {
         method: "POST",
         body: formData,
+        headers: {
+          Accept: "application/json",
+        },
       });
 
       if (!response.ok) {
@@ -102,7 +105,9 @@ export default function AddPelanggan() {
             className="input input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
           ></textarea>
           {errors.address && (
-            <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.address.message}
+            </p>
           )}
         </div>
 
@@ -152,12 +157,17 @@ export default function AddPelanggan() {
 
         {/* Jenis Jaminan */}
         <div>
-          <label htmlFor="guaranteeType" className="block text-sm font-medium mb-1">
+          <label
+            htmlFor="guaranteeType"
+            className="block text-sm font-medium mb-1"
+          >
             Jenis Jaminan
           </label>
           <select
             id="guaranteeType"
-            {...register("guaranteeType", { required: "Jenis jaminan wajib dipilih." })}
+            {...register("guaranteeType", {
+              required: "Jenis jaminan wajib dipilih.",
+            })}
             className="input input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
           >
             <option value="">Pilih jenis jaminan</option>
@@ -166,7 +176,9 @@ export default function AddPelanggan() {
             <option value="Passport">Passport</option>
           </select>
           {errors.guaranteeType && (
-            <p className="text-red-500 text-sm mt-1">{errors.guaranteeType.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.guaranteeType.message}
+            </p>
           )}
         </div>
 
@@ -180,7 +192,9 @@ export default function AddPelanggan() {
               type="file"
               id="file"
               accept=".pdf,.jpg,.jpeg,.png"
-              {...register("file", { required: "File jaminan wajib diunggah." })}
+              {...register("file", {
+                required: "File jaminan wajib diunggah.",
+              })}
               className="file-input file-input-bordered w-full p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
             />
             <FaUpload className="text-green-500 text-xl" />
