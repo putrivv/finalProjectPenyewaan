@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Kategori } from "./kategori.type"; // Import tipe data Kategori
-import { getKategori } from "@/app/utils/api"; // Import fungsi getKategori
+import { getKategori, deleteKategori } from "@/app/utils/api"; // Import fungsi getKategori & deleteKategori
+import Link from "next/link";
+import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
 const KategoriPage = () => {
   const [categories, setCategories] = useState<Kategori[]>([]);
@@ -20,10 +22,28 @@ const KategoriPage = () => {
     fetchCategories();
   }, []);
 
+  const handleDelete = async (id: number) => {
+    if (!confirm("Apakah Anda yakin ingin menghapus kategori ini?")) return;
+    try {
+      await deleteKategori(id);
+      setCategories(categories.filter((kategori) => kategori.kategori_id !== id));
+    } catch (err: any) {
+      console.error("Error deleting category:", err);
+      setError(err.message || "Gagal menghapus kategori");
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       {/* Header Section */}
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Kategori Alat</h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Kategori Alat</h1>
+        <Link href="/Admin/TambahKategori">
+          <button className="btn flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300">
+            <FaPlus /> Tambah Kategori
+          </button>
+        </Link>
+      </div>
 
       {/* Error Handling */}
       {error && (
@@ -41,14 +61,23 @@ const KategoriPage = () => {
           >
             {/* Icon or Image Placeholder */}
             <div className="w-full h-32 bg-gray-200 flex items-center justify-center">
-              {/* Replace with actual icon or image */}
               <span className="text-4xl text-gray-400">📦</span>
             </div>
             {/* Category Name */}
-            <div className="p-4">
+            <div className="p-4 flex justify-between items-center">
               <h2 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
                 {kategori.kategori_nama}
               </h2>
+              <div className="flex gap-2">
+                <Link href={`/Admin/EditKategori/${kategori.kategori_id}`}>
+                  <button className="text-blue-500 hover:text-blue-700">
+                    <FaEdit />
+                  </button>
+                </Link>
+                <button onClick={() => handleDelete(kategori.kategori_id)} className="text-red-500 hover:text-red-700">
+                  <FaTrash />
+                </button>
+              </div>
             </div>
           </div>
         ))}
