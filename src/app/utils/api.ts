@@ -86,3 +86,29 @@ export const getKategori = async (): Promise<{ success: boolean; message: string
     throw error;
   }
 };
+
+// Fungsi untuk menambahkan kategori baru
+export const addKategori = async (formData: { kategori_nama: string }) => {
+    try {
+      // Ambil token dari local storage
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+      }
+  
+      const response = await axios.post(
+        "https://final-project.aran8276.site/api/kategori",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Sertakan token di header
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error adding category:", error);
+      throw error;
+    }
+  };
