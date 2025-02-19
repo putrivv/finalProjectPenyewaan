@@ -113,7 +113,7 @@ const Beranda = () => {
           <h2 className="text-2xl font-bold text-[#050315] mb-4">Data Pelanggan</h2>
           {pelangganData.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+              <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md text-xs">
                 <thead className="bg-[#B9E5E8] text-[#050315]">
                   <tr>
                     <th className="py-3 px-4 text-left font-semibold">Nama Pelanggan</th>
