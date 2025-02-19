@@ -2,6 +2,8 @@ import axios from "axios";
 import { Item } from "../(loggedin)/Admin/ListAlat/ListAlat.types";
 import { Kategori } from "../(loggedin)/Admin/Kategori/kategori.type"; // Sesuaikan path sesuai struktur proyek Anda
 import { Alat } from "../(loggedin)/Admin/AddAlat/addalat.type";
+import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type";
+
 // Fungsi untuk login
 export const loginUser = async (formData: {
   admin_username: string;

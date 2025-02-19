@@ -1,14 +1,9 @@
 "use client";
-import Link from "next/link";
 import { useState, useEffect } from "react";
-import { FaPlus } from "react-icons/fa";
-
-interface Pelanggan {
-  id: number;
-  name: string;
-  email: string;
-  active: boolean;
-}
+import { FaPlus } from "react-icons/fa"; // Import ikon dari react-icons
+import Link from "next/link";
+import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type";
+import { getPelanggan } from "@/app/utils/api"; // Import fungsi getPelanggan
 
 export default function ListPelangganPage() {
   const [search, setSearch] = useState("");
@@ -19,12 +14,23 @@ export default function ListPelangganPage() {
   useEffect(() => {
     const fetchPelanggan = async () => {
       try {
-        const response = await fetch("/api/pelanggan");
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data pelanggan.");
+        const result = await getPelanggan(); // Menggunakan fungsi getPelanggan
+
+        // Validasi respons API
+        if (result.success && Array.isArray(result.data)) {
+          // Filter hanya pelanggan yang valid
+          const validPelanggan = result.data.filter(
+            (item) =>
+              typeof item.pelanggan_id === "number" &&
+              typeof item.pelanggan_nama === "string" &&
+              typeof item.pelanggan_alamat === "string" &&
+              typeof item.pelanggan_notelp === "number" &&
+              typeof item.pelanggan_email === "string"
+          );
+          setPelanggan(validPelanggan);
+        } else {
+          throw new Error("Data tidak valid.");
         }
-        const data = await response.json();
-        setPelanggan(data);
       } catch (error) {
         setError("Terjadi kesalahan saat mengambil data.");
         console.error("Error fetching data:", error);
@@ -32,95 +38,73 @@ export default function ListPelangganPage() {
         setLoading(false);
       }
     };
+
     fetchPelanggan();
   }, []);
 
-  const filteredPelanggan = pelanggan.filter(
-    (pelanggan) =>
-      pelanggan.name.toLowerCase().includes(search.toLowerCase()) ||
-      pelanggan.email.toLowerCase().includes(search.toLowerCase())
+  // Filtering items based on the search keyword
+  const filteredPelanggan = pelanggan.filter((item) =>
+    item.pelanggan_nama.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="container mx-auto p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6">Daftar Pelanggan</h1>
-      <hr className="border-t-2 border-[#d1fae5] mb-4" />
+    <div className="p-4">
+      <h1 className="text-3xl font-bold">Daftar Pelanggan</h1>
 
       {/* Search Bar and Button Container */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex justify-between items-center mt-4">
         {/* Search Bar */}
         <input
           type="text"
           placeholder="Cari pelanggan..."
-          className="input input-bordered w-full max-w-md p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="input input-bordered w-full max-w-xs"
         />
         {/* Button Tambah Pelanggan */}
         <Link href="/Admin/AddPelanggan">
-          <button className="btn flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 ml-4">
+          <button className="btn btn-primary flex items-center gap-2">
             <FaPlus /> Tambah Pelanggan
           </button>
         </Link>
       </div>
 
       {/* Loading or Error message */}
-      {loading && (
-        <div className="text-center py-4">
-          <span className="loading loading-spinner loading-md"></span>
-        </div>
-      )}
-      {error && (
-        <div className="text-center py-4 text-red-500">
-          <span>{error}</span>
-        </div>
-      )}
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Data table */}
       {!loading && !error && (
-        <div className="overflow-x-auto bg-white">
-          <table className="table w-full border-collapse border border-gray-300">
-            <thead className="bg-green-100">
-              <tr className="text-center">
-                <th className="p-3 border">ID</th>
-                <th className="p-3 border">Nama</th>
-                <th className="p-3 border">Email</th>
-                <th className="p-3 border">Status</th>
-                <th className="p-3 border">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPelanggan.length > 0 ? (
-                filteredPelanggan.map((pelanggan) => (
-                  <tr key={pelanggan.id} className="hover:bg-gray-50 transition">
-                    <td className="p-3 border text-center">{pelanggan.id}</td>
-                    <td className="p-3 border">{pelanggan.name}</td>
-                    <td className="p-3 border">{pelanggan.email}</td>
-                    <td className="p-3 border text-center">
-                      <span
-                        className={`px-3 py-1 rounded-md text-white text-sm font-medium ${
-                          pelanggan.active ? "bg-green-500" : "bg-red-500"
-                        }`}
-                      >
-                        {pelanggan.active ? "Aktif" : "Tidak Aktif"}
-                      </span>
-                    </td>
-                    <td className="p-3 border text-center">
-                      <button className="btn btn-sm btn-warning mr-2">Edit</button>
-                      <button className="btn btn-sm btn-danger">Hapus</button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="p-4 text-center text-gray-500">
-                    Tidak ada pelanggan ditemukan
-                  </td>
+        <table className="table table-zebra w-full mt-4">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama</th>
+              <th>Alamat</th>
+              <th>No. Telepon</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredPelanggan.length > 0 ? (
+              filteredPelanggan.map((item) => (
+                <tr key={item.pelanggan_id}>
+                  <td>{item.pelanggan_id}</td>
+                  <td>{item.pelanggan_nama}</td>
+                  <td>{item.pelanggan_alamat}</td>
+                  <td>{item.pelanggan_notelp}</td>
+                  <td>{item.pelanggan_email}</td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="text-center">
+                  Tidak ada pelanggan ditemukan
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       )}
     </div>
   );
