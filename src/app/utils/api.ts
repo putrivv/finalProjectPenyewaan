@@ -371,8 +371,75 @@ export const getPenyewaan = async (): Promise<{
   }
 };
 
+// Fungsi untuk menghapus penyewaan
+export const deletePenyewaan = async (id: number) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+    }
+    const response = await axios.delete(
+      `https://final-project.aran8276.site/api/penyewaan/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting penyewaan:", error);
+    throw error;
+  }
+};
+
+//Fungsi EditPenyewaan
+export const getPenyewaanById = async (
+  id: number
+): Promise<{ success: boolean; message: string; data: Penyewaan }> => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      `https://final-project.aran8276.site/api/penyewaan/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching penyewaan by ID:", error);
+    throw error;
+  }
+};
+
+export const updatePenyewaan = async (id: number, formData: Penyewaan) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.put(
+      `https://final-project.aran8276.site/api/penyewaan/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating penyewaan:", error);
+    throw error;
+  }
+};
 //List Barang Guest
-export const getBarang = async (): Promise<{
+// List Barang Guest dengan fitur filter kategori
+export const getBarang = async (
+  kategori?: string // Parameter opsional untuk filter kategori
+): Promise<{
   success: boolean;
   message: string;
   data: ListBarang[];
@@ -388,7 +455,13 @@ export const getBarang = async (): Promise<{
       throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
     }
 
-    const response = await fetch("https://final-project.aran8276.site/api/alat", {
+    // Buat URL dengan query parameter kategori jika ada
+    const url = new URL("https://final-project.aran8276.site/api/alat");
+    if (kategori) {
+      url.searchParams.append("kategori", kategori);
+    }
+
+    const response = await fetch(url.toString(), {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -422,29 +495,3 @@ export const getBarang = async (): Promise<{
     );
   }
 };
-
-
-
-// Fungsi untuk menghapus penyewaan
-export const deletePenyewaan = async (id: number) => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
-    }
-    const response = await axios.delete(
-      `https://final-project.aran8276.site/api/penyewaan/${id}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error deleting penyewaan:", error);
-    throw error;
-  }
-};
-

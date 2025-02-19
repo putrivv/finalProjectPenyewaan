@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { getPenyewaan, deletePenyewaan } from "@/app/utils/api";
 import { Penyewaan } from "@/app/(loggedin)/Admin/SewaAlat/penyewaan.type";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 
 const SewaAlat = () => {
   const [search, setSearch] = useState("");
@@ -55,7 +55,9 @@ const SewaAlat = () => {
           className="input input-bordered w-full max-w-xs"
         />
         <Link href="/Admin/AddPenyewaan">
-          <button className="btn btn-primary">Tambah Penyewaan</button>
+          <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-md shadow-md hover:shadow-lg transition duration-300">
+            <FaPlus className="text-xs" /> Tambah Penyewaan
+          </button>
         </Link>
       </div>
       {loading && <p>Loading...</p>}
@@ -87,13 +89,13 @@ const SewaAlat = () => {
                   <td>{item.penyewaan_totalharga.toLocaleString()}</td>
                   <td className="flex gap-2">
                     <Link href={`/Admin/EditPenyewaan/${item.penyewaan_id}`}>
-                      <PencilIcon className="w-5 h-5 text-blue-500 cursor-pointer hover:text-blue-700" />
+                      <FaEdit className="w-5 h-5 text-blue-500 cursor-pointer hover:text-blue-700" />
                     </Link>
                     <button
                       className="text-red-500 hover:text-red-700"
                       onClick={() => setDeleteId(item.penyewaan_id)}
                     >
-                      <TrashIcon className="w-5 h-5" />
+                      <FaTrash className="w-5 h-5" />
                     </button>
                   </td>
                 </tr>

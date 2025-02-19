@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getBarang } from "@/app/utils/api";
+import { getBarang, getKategori } from "@/app/utils/api";
 import { ListBarang } from "@/app/(guest)/listbarang/listbarang.type";
 
 const BarangCard: React.FC<ListBarang> = ({
@@ -41,39 +41,90 @@ const BarangList: React.FC = () => {
   const [barang, setBarang] = useState<ListBarang[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [kategori, setKategori] = useState<string>("");
+  const [kategoriList, setKategoriList] = useState<
+    { id: string; nama: string }[]
+  >([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchKategori = async () => {
       try {
-        const response = await getBarang();
+        const response = await getKategori();
         if (response.success) {
-          setBarang(response.data);
+          setKategoriList(response.data);
         } else {
-          setError(response.message);
+          setError(response.message || "Gagal mengambil data kategori.");
         }
-      } catch (err: unknown) {
+      } catch (err) {
         setError(
           err instanceof Error
             ? err.message
-            : "Terjadi kesalahan saat mengambil data."
+            : "Terjadi kesalahan saat mengambil data kategori."
         );
-      } finally {
-        setLoading(false);
       }
     };
+    fetchKategori();
+  }, []);
 
+  const fetchData = async (kategori?: string) => {
+    try {
+      const response = await getBarang(kategori);
+      if (response.success) {
+        setBarang(response.data);
+      } else {
+        setError(response.message || "Gagal mengambil data barang.");
+      }
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Terjadi kesalahan saat mengambil data barang."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
+  const handleKategoriChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedKategori = e.target.value;
+    setKategori(selectedKategori);
+    fetchData(selectedKategori);
+  };
+
   return (
     <div className="flex flex-col items-center p-8 bg-[#DFF2EB] min-h-screen">
+      <div className="mb-6">
+        <label htmlFor="kategori" className="mr-2 font-semibold text-gray-700">
+          Filter Kategori:
+        </label>
+        <select
+          id="kategori"
+          value={kategori}
+          onChange={handleKategoriChange}
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        >
+          <option value="">Semua Kategori</option>
+          {kategoriList.map((item) => (
+            <option key={item.id} value={item.nama}>
+              {item.nama}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {loading && <p className="text-gray-700">Memuat data...</p>}
       {error && <p className="text-red-600">Error: {error}</p>}
 
       <div className="w-full max-w-6xl px-4">
         <div className="flex flex-wrap gap-6 justify-center">
           {barang.length > 0
-            ? barang.map((item) => <BarangCard key={item.alat_id} {...item} />)
+            ? barang.map((item, index) => (
+                <BarangCard key={item.alat_id ?? index} {...item} />
+              ))
             : !loading && (
                 <p className="text-gray-500">Tidak ada barang tersedia.</p>
               )}
