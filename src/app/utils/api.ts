@@ -200,6 +200,46 @@ export const addAlat = async (formData: Alat) => {
     throw error;
   }
 };
+
+//Fungsi untuk editAlat
+const API_URL = "https://final-project.aran8276.site/api/alat";
+
+export const getAlatById = async (
+  id: number
+): Promise<{ success: boolean; message: string; data: Alat }> => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${API_URL}/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching alat by ID:", error);
+    throw error;
+  }
+};
+
+export const updateAlat = async (id: number, formData: Alat) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.put(`${API_URL}/${id}`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating alat:", error);
+    throw error;
+  }
+};
+
+
+
 // Fungsi untuk menghapus alat
 export const deleteAlat = async (id: number) => {
   try {
