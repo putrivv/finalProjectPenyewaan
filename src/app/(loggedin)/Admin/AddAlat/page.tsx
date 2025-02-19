@@ -1,7 +1,8 @@
 "use client"; // Tambahkan ini untuk menandai file sebagai Client Component
-import { useState } from "react";
-import { addAlat } from "@/app/utils/api"; // Import fungsi addAlat
+import { useState, useEffect } from "react";
+import { addAlat, getKategori } from "@/app/utils/api"; // Import fungsi addAlat dan getKategori
 import { Alat } from "./addalat.type"; // Import tipe Alat
+import { Kategori } from "../Kategori/kategori.type"; // Import tipe Kategori
 
 export default function AddAlat() {
   // State untuk menyimpan nilai input
@@ -17,9 +18,27 @@ export default function AddAlat() {
   const [message, setMessage] = useState<string | null>(null);
   const [isError, setIsError] = useState(false);
 
+  // State untuk menyimpan daftar kategori
+  const [categories, setCategories] = useState<Kategori[]>([]);
+
+  // Fetch data kategori saat halaman dimuat
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const result = await getKategori();
+        setCategories(result.data); // Simpan data kategori ke state
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        setMessage("Gagal mengambil data kategori.");
+        setIsError(true);
+      }
+    };
+    fetchCategories();
+  }, []);
+
   // Handler untuk mengubah state saat input berubah
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
 
@@ -79,18 +98,23 @@ export default function AddAlat() {
             </div>
           )}
 
-          {/* Input untuk alat_kategori_id */}
+          {/* Dropdown untuk memilih kategori */}
           <div>
-            <label className="block text-sm font-medium">ID Kategori</label>
-            <input
-              type="number"
+            <label className="block text-sm font-medium">Kategori</label>
+            <select
               name="alat_kategori_id"
               value={formData.alat_kategori_id}
               onChange={handleChange}
-              placeholder="Masukkan ID Kategori"
               className="input input-bordered w-full mt-1"
               required
-            />
+            >
+              <option value="">Pilih Kategori</option>
+              {categories.map((kategori) => (
+                <option key={kategori.kategori_id} value={kategori.kategori_id}>
+                  {kategori.kategori_nama}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Input untuk alat_nama */}

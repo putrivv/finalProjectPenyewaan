@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { getAlat } from "@/app/utils/api"; // Sesuaikan path ke file api.ts
-import { Item } from "@/app/(loggedin)/Admin/ListAlat/ListAlat.types"; // Impor tipe Item dari file types.ts
+import { getAlat } from "@/app/utils/api"; // Import fungsi getAlat
+import { Item } from "@/app/(loggedin)/Admin/ListAlat/ListAlat.types"; // Import tipe Item
 import { FaPlus } from "react-icons/fa"; // Import ikon dari react-icons
 import Link from "next/link";
 
@@ -23,7 +23,7 @@ export default function RentalListPage() {
               typeof item.alat_id === "number" &&
               typeof item.alat_nama === "string" &&
               typeof item.alat_kategori_id === "number" &&
-              typeof item.alat_hargaPerhari === "number" &&
+              typeof item.alat_hargaperhari === "number" &&
               typeof item.alat_stok === "number"
           );
           setItems(validItems);
@@ -46,90 +46,72 @@ export default function RentalListPage() {
   );
 
   return (
-    <div className="container mx-auto p-6 text-gray-800">
-      <h1 className="text-3xl font-bold mb-6">Daftar Barang Penyewaan</h1>
-      <hr className="border-t-2 border-[#d1fae5] mb-4" />
+    <div className="p-4">
+      <h1 className="text-3xl font-bold">Daftar Barang Penyewaan</h1>
 
       {/* Search Bar and Button Container */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex justify-between items-center mt-4">
         {/* Search Bar */}
         <input
           type="text"
           placeholder="Cari barang..."
-          className="input input-bordered w-full max-w-md p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="input input-bordered w-full max-w-xs"
         />
 
         {/* Button Tambah Alat */}
-        <Link href="/Admin/AddAlat">
-          <button className="btn flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 ml-4">
+        <Link href="/admin/add-alat">
+          <button className="btn btn-primary flex items-center gap-2">
             <FaPlus /> Tambah Alat
           </button>
         </Link>
       </div>
 
       {/* Loading or Error message */}
-      {loading && (
-        <div className="text-center py-4">
-          <span className="loading loading-spinner loading-md"></span>
-        </div>
-      )}
-      {error && (
-        <div className="text-center py-4 text-red-500">
-          <span>{error}</span>
-        </div>
-      )}
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Data table */}
       {!loading && !error && (
-        <div className="overflow-x-auto bg-white">
-          <table className="table w-full border-collapse border border-gray-300">
-            <thead className="bg-green-100">
-              <tr className="text-center">
-                <th className="p-3 border">ID</th>
-                <th className="p-3 border">Nama Alat</th>
-                <th className="p-3 border">Kategori ID</th>
-                <th className="p-3 border">Harga (IDR)</th>
-                <th className="p-3 border">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredItems.length > 0 ? (
-                filteredItems.map((item) => (
-                  <tr
-                    key={item.alat_id}
-                    className="hover:bg-gray-50 transition"
-                  >
-                    <td className="p-3 border text-center">{item.alat_id}</td>
-                    <td className="p-3 border">{item.alat_nama}</td>
-                    <td className="p-3 border text-center">
-                      {item.alat_kategori_id}
-                    </td>
-                    <td className="p-3 border text-center font-medium">
-                      {item.alat_hargaPerhari.toLocaleString()}
-                    </td>
-                    <td className="p-3 border text-center">
-                      <span
-                        className={`px-3 py-1 rounded-md text-white text-sm font-medium ${
-                          item.alat_stok > 0 ? "bg-green-500" : "bg-red-500"
-                        }`}
-                      >
-                        {item.alat_stok > 0 ? "Tersedia" : "Tidak Tersedia"}
-                      </span>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="p-4 text-center text-gray-500">
-                    Tidak ada barang ditemukan
+        <table className="table table-zebra w-full mt-4">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama Alat</th>
+              <th>Kategori</th>
+              <th>Harga (IDR)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item) => (
+                <tr key={item.alat_id}>
+                  <td>{item.alat_id}</td>
+                  <td>{item.alat_nama}</td>
+                  <td>{item.kategori.kategori_nama}</td>
+                  <td>{item.alat_hargaperhari.toLocaleString()}</td>
+                  <td>
+                    <span
+                      className={`badge ${
+                        item.alat_stok > 0 ? "badge-success" : "badge-error"
+                      }`}
+                    >
+                      {item.alat_stok > 0 ? "Tersedia" : "Tidak Tersedia"}
+                    </span>
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="text-center">
+                  Tidak ada barang ditemukan
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       )}
     </div>
   );
