@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Head from "next/head";
 import { Kategori } from "./kategori.type"; // Import tipe data Kategori
 import { getKategori } from "@/app/utils/api"; // Sesuaikan path sesuai struktur proyek Anda
 

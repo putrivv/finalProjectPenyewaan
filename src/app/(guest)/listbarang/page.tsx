@@ -35,16 +35,6 @@ const EquipmentList = () => {
 
   return (
     <div className="flex flex-col items-center p-8 bg-[#DFF2EB] min-h-screen">
-      {/* Container untuk tombol "Kembali" */}
-      <div className="w-full max-w-6xl px-4"> {/* Tambahkan container dengan lebar maksimal dan padding */}
-        <button
-          onClick={() => router.back()} // Fungsi untuk kembali ke halaman sebelumnya
-          className="mb-8 px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300"
-        >
-          Kembali
-        </button>
-      </div>
-
       {/* Daftar Equipment */}
       <div className="w-full max-w-6xl px-4"> {/* Container untuk daftar peralatan */}
         <div className="flex flex-wrap gap-6 justify-center">

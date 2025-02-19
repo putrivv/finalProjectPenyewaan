@@ -4,12 +4,20 @@ export default function Navbar() {
   return (
     <div className="navbar bg-[#DFF2EB] border-b border-gray-300 px-40">
       <div className="flex-1">
-        <Link href="/" className="btn btn-ghost text-xl font-bold text-gray-800">
+        <h1 className="text-xl font-bold text-gray-800">
           BEAR RENTAL
-        </Link>
+        </h1>
       </div>
       <div className="hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-gray-800">
+        <li>
+            <Link 
+              href="/" 
+              className="btn btn-ghost mr-4" 
+            >
+              Home
+            </Link>
+          </li>
           <li>
             <Link 
               href="/about" 
