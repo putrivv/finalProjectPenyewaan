@@ -75,8 +75,8 @@ const Beranda = () => {
 
       {/* Loading State */}
       {loading && (
-        <div className="flex justify-center items-center h-40">
-          <p className="text-gray-500">Loading...</p>
+        <div className="flex justify-center items-center min-h-screen">
+          <span className="loading loading-bars loading-xs"></span>
         </div>
       )}
 

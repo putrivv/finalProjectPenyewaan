@@ -67,7 +67,11 @@ export default function ListPelangganPage() {
       </div>
 
       {/* Loading or Error message */}
-      {loading && <p>Loading...</p>}
+      {loading && (
+        <div className="flex justify-center items-center min-h-screen">
+          <span className="loading loading-bars loading-xs"></span>
+        </div>
+      )}
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Data table */}
@@ -86,8 +90,13 @@ export default function ListPelangganPage() {
           <tbody>
             {filteredPelanggan.length > 0 ? (
               filteredPelanggan.map((item) => (
-                <tr key={item.pelanggan_id} className="hover:bg-gray-50 transition">
-                  <td className="p-3 border text-center">{item.pelanggan_id}</td>
+                <tr
+                  key={item.pelanggan_id}
+                  className="hover:bg-gray-50 transition"
+                >
+                  <td className="p-3 border text-center">
+                    {item.pelanggan_id}
+                  </td>
                   <td className="p-3 border">{item.pelanggan_nama}</td>
                   <td className="p-3 border">{item.pelanggan_alamat}</td>
                   <td className="p-3 border">{item.pelanggan_notelp}</td>

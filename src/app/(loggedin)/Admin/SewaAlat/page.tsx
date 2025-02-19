@@ -60,7 +60,11 @@ const SewaAlat = () => {
           </button>
         </Link>
       </div>
-      {loading && <p>Loading...</p>}
+      {loading && (
+        <div className="flex justify-center items-center min-h-screen">
+          <span className="loading loading-bars loading-xs"></span>
+        </div>
+      )}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && !error && (
         <table className="table table-zebra w-full mt-4">
