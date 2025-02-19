@@ -1,5 +1,7 @@
-"use client"
+"use client";
+import Link from "next/link";
 import { useState, useEffect } from "react";
+import { FaPlus } from "react-icons/fa";
 
 interface Pelanggan {
   id: number;
@@ -12,47 +14,74 @@ export default function ListPelangganPage() {
   const [search, setSearch] = useState("");
   const [pelanggan, setPelanggan] = useState<Pelanggan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPelanggan = async () => {
       try {
-        const response = await fetch("/api/pelanggan"); 
+        const response = await fetch("/api/pelanggan");
+        if (!response.ok) {
+          throw new Error("Gagal mengambil data pelanggan.");
+        }
         const data = await response.json();
         setPelanggan(data);
       } catch (error) {
+        setError("Terjadi kesalahan saat mengambil data.");
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchPelanggan();
   }, []);
 
-  const filteredPelanggan = pelanggan.filter((pelanggan) =>
-    pelanggan.name.toLowerCase().includes(search.toLowerCase()) ||
-    pelanggan.email.toLowerCase().includes(search.toLowerCase())
+  const filteredPelanggan = pelanggan.filter(
+    (pelanggan) =>
+      pelanggan.name.toLowerCase().includes(search.toLowerCase()) ||
+      pelanggan.email.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="container mx-auto p-6 text-gray-800">
       <h1 className="text-3xl font-bold mb-6">Daftar Pelanggan</h1>
-      <input
-        type="text"
-        placeholder="Cari pelanggan..."
-        className="input input-bordered w-full mb-4 p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      {loading ? (
-        <div className="text-center py-4 bg-white">
+      <hr className="border-t-2 border-[#d1fae5] mb-4" />
+
+      {/* Search Bar and Button Container */}
+      <div className="flex items-center justify-between mb-4">
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="Cari pelanggan..."
+          className="input input-bordered w-full max-w-md p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        {/* Button Tambah Pelanggan */}
+        <Link href="/Admin/AddPelanggan">
+          <button className="btn flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 ml-4">
+            <FaPlus /> Tambah Pelanggan
+          </button>
+        </Link>
+      </div>
+
+      {/* Loading or Error message */}
+      {loading && (
+        <div className="text-center py-4">
           <span className="loading loading-spinner loading-md"></span>
         </div>
-      ) : (
-        <div className="overflow-x-auto">
+      )}
+      {error && (
+        <div className="text-center py-4 text-red-500">
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* Data table */}
+      {!loading && !error && (
+        <div className="overflow-x-auto bg-white">
           <table className="table w-full border-collapse border border-gray-300">
             <thead className="bg-green-100">
-              <tr>
+              <tr className="text-center">
                 <th className="p-3 border">ID</th>
                 <th className="p-3 border">Nama</th>
                 <th className="p-3 border">Email</th>
