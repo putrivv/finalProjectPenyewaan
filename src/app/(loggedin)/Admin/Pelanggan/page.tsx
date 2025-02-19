@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { FaPlus } from "react-icons/fa"; // Import ikon dari react-icons
+import { FaPlus, FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import Link from "next/link";
-import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type"; // Import tipe Pelanggan
-import { getPelanggan } from "@/app/utils/api"; // Import fungsi getPelanggan
+import { Pelanggan } from "@/app/(loggedin)/Admin/Pelanggan/pelanggan.type";
+import { getPelanggan, deletePelanggan } from "@/app/utils/api";
 
 export default function ListPelangganPage() {
   const [search, setSearch] = useState("");
@@ -14,10 +14,8 @@ export default function ListPelangganPage() {
   useEffect(() => {
     const fetchPelanggan = async () => {
       try {
-        const result = await getPelanggan(); // Menggunakan fungsi getPelanggan
-        // Validasi respons API
+        const result = await getPelanggan();
         if (result.success && Array.isArray(result.data)) {
-          // Filter hanya pelanggan yang valid
           const validPelanggan = result.data.filter(
             (item) =>
               typeof item.pelanggan_id === "number" &&
@@ -40,7 +38,18 @@ export default function ListPelangganPage() {
     fetchPelanggan();
   }, []);
 
-  // Filtering items based on the search keyword
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus pelanggan ini?");
+    if (confirmDelete) {
+      try {
+        await deletePelanggan(id);
+        setPelanggan(pelanggan.filter((item) => item.pelanggan_id !== id));
+      } catch (error) {
+        console.error("Gagal menghapus pelanggan:", error);
+      }
+    }
+  };
+
   const filteredPelanggan = pelanggan.filter((item) =>
     item.pelanggan_nama.toLowerCase().includes(search.toLowerCase())
   );
@@ -49,8 +58,6 @@ export default function ListPelangganPage() {
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Daftar Pelanggan</h1>
       <hr className="border-t-2 border-[#d1fae5] mb-4" />
-
-      {/* Search Bar and Button Container */}
       <div className="flex items-center justify-between mb-4">
         <input
           type="text"
@@ -66,7 +73,6 @@ export default function ListPelangganPage() {
         </Link>
       </div>
 
-      {/* Loading or Error message */}
       {loading && (
         <div className="flex justify-center items-center min-h-screen">
           <span className="loading loading-bars loading-xs"></span>
@@ -74,7 +80,6 @@ export default function ListPelangganPage() {
       )}
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* Data table */}
       {!loading && !error && (
         <table className="table w-full border-collapse border border-gray-300">
           <thead className="bg-green-100">
@@ -84,33 +89,37 @@ export default function ListPelangganPage() {
               <th className="p-3 border">Alamat</th>
               <th className="p-3 border">No. Telepon</th>
               <th className="p-3 border">Email</th>
+              <th className="p-3 border">Detail</th>
               <th className="p-3 border">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {filteredPelanggan.length > 0 ? (
               filteredPelanggan.map((item) => (
-                <tr
-                  key={item.pelanggan_id}
-                  className="hover:bg-gray-50 transition"
-                >
-                  <td className="p-3 border text-center">
-                    {item.pelanggan_id}
-                  </td>
+                <tr key={item.pelanggan_id} className="hover:bg-gray-50 transition">
+                  <td className="p-3 border text-center">{item.pelanggan_id}</td>
                   <td className="p-3 border">{item.pelanggan_nama}</td>
                   <td className="p-3 border">{item.pelanggan_alamat}</td>
                   <td className="p-3 border">{item.pelanggan_notelp}</td>
                   <td className="p-3 border">{item.pelanggan_email}</td>
                   <td className="p-3 border text-center">
                     <Link href={`/Admin/DataPelanggan/${item.pelanggan_id}`}>
-                      <button className="btn btn-sm btn-primary">Lihat</button>
+                      <button className="btn btn-sm btn-outline">
+                        <FaEllipsisV className="text-gray-700" size={10} />
+                      </button>
                     </Link>
+                  </td>
+                  <td className="p-3 border text-center flex justify-center gap-3">
+                    <Link href={`/Admin/EditPelanggan/${item.pelanggan_id}`}>
+                      <FaEdit className="text-yellow-500 cursor-pointer" size={18} />
+                    </Link>
+                    <FaTrash className="text-red-500 cursor-pointer" size={18} onClick={() => handleDelete(item.pelanggan_id)} />
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="p-4 text-center text-gray-500">
+                <td colSpan={7} className="p-4 text-center text-gray-500">
                   Tidak ada pelanggan ditemukan
                 </td>
               </tr>

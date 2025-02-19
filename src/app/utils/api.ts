@@ -587,3 +587,68 @@ export const addPelanggan = async (
     }
   }
 };
+
+//Fungsi EditPelanggan
+export const getPelangganById = async (
+  id: number
+): Promise<{ success: boolean; message: string; data: Pelanggan }> => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      `https://final-project.aran8276.site/api/pelanggan/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching pelanggan by ID:", error);
+    throw error;
+  }
+};
+
+export const updatePelanggan = async (id: number, formData: Pelanggan) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.put(
+      `https://final-project.aran8276.site/api/pelanggan/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating pelanggan:", error);
+    throw error;
+  }
+};
+
+//Fungsi deletePelanggan
+export const deletePelanggan = async (id: number) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Token tidak ditemukan. Silakan login terlebih dahulu.");
+    }
+    const response = await axios.delete(
+      `https://final-project.aran8276.site/api/pelanggan/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting penyewaan:", error);
+    throw error;
+  }
+};
