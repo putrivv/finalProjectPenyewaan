@@ -30,14 +30,37 @@ export const registerUser = async (formData: {
   admin_email: string;
   admin_password: string;
 }) => {
-  const response = await axios.post(
-    "https://final-project.aran8276.site/api/register",
-    formData,
-    {
-      headers: { "Content-Type": "application/json" },
+  try {
+    const response = await axios.post(
+      "https://final-project.aran8276.site/api/register",
+      formData,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    // Pastikan respons dari server valid
+    if (response.status !== 200 && response.status !== 201) {
+      throw new Error(`Server responded with status ${response.status}`);
     }
-  );
-  return response.data;
+
+    return response.data; // Kembalikan data dari server
+  } catch (error: any) {
+    // Tangani error dengan lebih baik
+    if (error.response) {
+      // Server merespons dengan status code selain 2xx
+      console.error("Server Error:", error.response.data);
+      throw new Error(error.response.data.message || "Registrasi gagal.");
+    } else if (error.request) {
+      // Tidak ada respons dari server
+      console.error("No response received from server:", error.request);
+      throw new Error("Tidak ada respons dari server. Silakan coba lagi.");
+    } else {
+      // Kesalahan lainnya
+      console.error("Error:", error.message);
+      throw new Error("Terjadi kesalahan saat mencoba mendaftar.");
+    }
+  }
 };
 // Fungsi untuk forgot password
 export const forgotPassword = async (formData: { email: string }) => {

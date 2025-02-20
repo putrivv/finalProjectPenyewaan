@@ -133,6 +133,7 @@ export default function RegisterPage() {
               </p>
               <div className="flex justify-end">
                 <button
+                  name="ok"
                   className="btn bg-[#B9E5E8] text-[#050315] border-none hover:bg-[#7AB2D3] transition duration-300 ease-in-out"
                   onClick={closeModal}
                 >
