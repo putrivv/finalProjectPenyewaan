@@ -5,6 +5,7 @@ import {
   FaTools,
   FaShoppingCart,
   FaUsers,
+  FaSignOutAlt,
 } from "react-icons/fa";
 
 const Sidebar = () => {
@@ -63,6 +64,16 @@ const Sidebar = () => {
             Pelanggan
           </Link>
         </li>
+        <li>
+          <Link
+            href="/"
+            className="flex items-center py-4 px-4 rounded-lg text-[#050315] hover:bg-red-100 hover:text-red-600 transition duration-300 ease-in-ou"
+          >
+            <FaSignOutAlt  className="mr-2" />
+            Logout
+          </Link>
+        </li>
+        
       </ul>
     </div>
   );
