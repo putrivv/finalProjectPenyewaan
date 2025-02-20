@@ -124,7 +124,7 @@ export default function AddKategori() {
               type="submit"
               className="w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-out"
             >
-              Simpan Kategori
+              Simpan Data
             </button>
           </div>
         </div>

@@ -39,7 +39,9 @@ export default function ListPelangganPage() {
   }, []);
 
   const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus pelanggan ini?");
+    const confirmDelete = window.confirm(
+      "Apakah Anda yakin ingin menghapus pelanggan ini?"
+    );
     if (confirmDelete) {
       try {
         await deletePelanggan(id);
@@ -57,7 +59,7 @@ export default function ListPelangganPage() {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Daftar Pelanggan</h1>
-      <hr className="border-t-2 border-[#d1fae5] mb-4" />
+      <hr className="border-t-2 border-[#4ac786] mb-4" />
       <div className="flex items-center justify-between mb-4">
         <input
           type="text"
@@ -67,8 +69,8 @@ export default function ListPelangganPage() {
           className="input input-bordered w-full max-w-md p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
         />
         <Link href="/Admin/AddPelanggan">
-          <button className="btn flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-300 ml-4">
-            <FaPlus /> Tambah Pelanggan
+          <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-md shadow-md hover:shadow-lg transition duration-300">
+            <FaPlus className="text-xs" /> Tambah Pelanggan
           </button>
         </Link>
       </div>
@@ -81,51 +83,65 @@ export default function ListPelangganPage() {
       {error && <p className="text-red-500">{error}</p>}
 
       {!loading && !error && (
-        <table className="table w-full border-collapse border border-gray-300">
-          <thead className="bg-green-100">
-            <tr className="text-center">
-              <th className="p-3 border">ID</th>
-              <th className="p-3 border">Nama</th>
-              <th className="p-3 border">Alamat</th>
-              <th className="p-3 border">No. Telepon</th>
-              <th className="p-3 border">Email</th>
-              <th className="p-3 border">Detail</th>
-              <th className="p-3 border">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredPelanggan.length > 0 ? (
-              filteredPelanggan.map((item) => (
-                <tr key={item.pelanggan_id} className="hover:bg-gray-50 transition">
-                  <td className="p-3 border text-center">{item.pelanggan_id}</td>
-                  <td className="p-3 border">{item.pelanggan_nama}</td>
-                  <td className="p-3 border">{item.pelanggan_alamat}</td>
-                  <td className="p-3 border">{item.pelanggan_notelp}</td>
-                  <td className="p-3 border">{item.pelanggan_email}</td>
-                  <td className="p-3 border text-center">
-                    <Link href={`/Admin/DataPelanggan/${item.pelanggan_id}`}>
-                      <button className="btn btn-sm btn-outline">
-                        <FaEllipsisV className="text-gray-700" size={10} />
-                      </button>
-                    </Link>
-                  </td>
-                  <td className="p-3 border text-center flex justify-center gap-3">
-                    <Link href={`/Admin/EditPelanggan/${item.pelanggan_id}`}>
-                      <FaEdit className="text-yellow-500 cursor-pointer" size={18} />
-                    </Link>
-                    <FaTrash className="text-red-500 cursor-pointer" size={18} onClick={() => handleDelete(item.pelanggan_id)} />
+        <div className="overflow-x-auto text-xs">
+          <table className="table-auto w-full border-collapse border border-gray-300 bg-white shadow-md rounded-lg">
+            <thead className="bg-green-100">
+              <tr className="text-center">
+                <th className="p-3 border">ID</th>
+                <th className="p-3 border">Nama</th>
+                <th className="p-3 border">Alamat</th>
+                <th className="p-3 border">No. Telepon</th>
+                <th className="p-3 border">Email</th>
+                <th className="p-3 border">Detail</th>
+                <th className="p-3 border">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPelanggan.length > 0 ? (
+                filteredPelanggan.map((item) => (
+                  <tr
+                    key={item.pelanggan_id}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    <td className="p-3 border text-center">
+                      {item.pelanggan_id}
+                    </td>
+                    <td className="p-3 border">{item.pelanggan_nama}</td>
+                    <td className="p-3 border">{item.pelanggan_alamat}</td>
+                    <td className="p-3 border">{item.pelanggan_notelp}</td>
+                    <td className="p-3 border">{item.pelanggan_email}</td>
+                    <td className="p-3 border text-center">
+                      <Link href={`/Admin/DataPelanggan/${item.pelanggan_id}`}>
+                        <button className="btn btn-sm btn-outline">
+                          <FaEllipsisV className="text-gray-700" size={10} />
+                        </button>
+                      </Link>
+                    </td>
+                    <td className="p-3 border text-center flex justify-center gap-3">
+                      <Link href={`/Admin/EditPelanggan/${item.pelanggan_id}`}>
+                        <FaEdit
+                          className="text-yellow-500 cursor-pointer"
+                          size={18}
+                        />
+                      </Link>
+                      <FaTrash
+                        className="text-red-500 cursor-pointer"
+                        size={18}
+                        onClick={() => handleDelete(item.pelanggan_id)}
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="p-4 text-center text-gray-500">
+                    Tidak ada pelanggan ditemukan
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} className="p-4 text-center text-gray-500">
-                  Tidak ada pelanggan ditemukan
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
