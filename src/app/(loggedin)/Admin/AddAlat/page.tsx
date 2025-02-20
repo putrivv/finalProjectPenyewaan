@@ -1,8 +1,46 @@
 "use client"; // Tambahkan ini untuk menandai file sebagai Client Component
 import { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa"; // Import ikon dari react-icons
 import { addAlat, getKategori } from "@/app/utils/api"; // Import fungsi addAlat dan getKategori
 import { Alat } from "./addalat.type"; // Import tipe Alat
 import { Kategori } from "../Kategori/kategori.type"; // Import tipe Kategori
+
+// Komponen Notifikasi (Portal)
+const Notification = ({
+  message,
+  isError,
+  onClose,
+}: {
+  message: string;
+  isError: boolean;
+  onClose: () => void;
+}) => {
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      {/* Background Blur */}
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      {/* Notifikasi Box */}
+      <div
+        className={`relative p-8 rounded-2xl shadow-lg text-center ${
+          isError ? "bg-red-50 text-red-500" : "bg-gray-50 text-green-500"
+        }`}
+      >
+        {/* Ikon Besar */}
+        <div className="mb-4">
+          {isError ? (
+            <FaExclamationCircle className="text-6xl mx-auto text-red-500" />
+          ) : (
+            <FaCheckCircle className="text-6xl mx-auto text-green-500" />
+          )}
+        </div>
+        {/* Pesan */}
+        <p className="text-base font-light">{message}</p>
+      </div>
+    </div>,
+    document.body // Tempatkan notifikasi di dalam body
+  );
+};
 
 export default function AddAlat() {
   // State untuk menyimpan nilai input
@@ -74,6 +112,9 @@ export default function AddAlat() {
         alat_hargaperhari: 0,
         alat_stok: 0,
       });
+
+      // Hilangkan notifikasi setelah 2 detik
+      setTimeout(() => setMessage(null), 2000);
     } catch (error) {
       console.error("Error caught:", error);
       let errorMessage = "Terjadi kesalahan yang tidak diketahui";
@@ -82,6 +123,9 @@ export default function AddAlat() {
       }
       setMessage(errorMessage);
       setIsError(true);
+
+      // Hilangkan notifikasi setelah 2 detik
+      setTimeout(() => setMessage(null), 2000);
     }
   };
 
@@ -90,13 +134,6 @@ export default function AddAlat() {
       <form onSubmit={handleSubmit} className="w-full max-w-lg">
         <div className="space-y-4">
           <h1 className="text-3xl font-bold">Input Data Alat</h1>
-
-          {/* Menampilkan pesan feedback */}
-          {message && (
-            <div className={`alert ${isError ? "alert-error" : "alert-success"} mb-4`}>
-              {message}
-            </div>
-          )}
 
           {/* Dropdown untuk memilih kategori */}
           <div>
@@ -181,6 +218,15 @@ export default function AddAlat() {
           </div>
         </div>
       </form>
+
+      {/* Render Notifikasi (Portal) */}
+      {message && (
+        <Notification
+          message={message}
+          isError={isError}
+          onClose={() => setMessage(null)}
+        />
+      )}
     </div>
   );
 }

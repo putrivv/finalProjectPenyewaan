@@ -141,7 +141,7 @@ export default function EditAlat() {
         <div>
           <button
             type="submit"
-            className="btn btn-primary w-full bg-[#d1fae5] text-[#050315] hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-out"
+            className="btn  w-full bg-[#d1fae5] text-[#050315] hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-out"
           >
             Perbarui Data
           </button>

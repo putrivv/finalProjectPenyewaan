@@ -2,6 +2,44 @@
 import React, { useState } from "react";
 import { addPelanggan } from "@/app/utils/api";
 import { PelangganInput } from "@/app/(loggedin)/Admin/AddPelanggan/addpelanggan.type";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa"; // Import ikon dari react-icons
+import ReactDOM from "react-dom"; // Import ReactDOM untuk membuat portal
+
+// Komponen Notifikasi (Portal)
+const Notification = ({
+  message,
+  isError,
+  onClose,
+}: {
+  message: string;
+  isError: boolean;
+  onClose: () => void;
+}) => {
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      {/* Background Blur */}
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      {/* Notifikasi Box */}
+      <div
+        className={`relative p-8 rounded-2xl shadow-lg text-center ${
+          isError ? "bg-red-50 text-red-500" : "bg-gray-50 text-green-500"
+        }`}
+      >
+        {/* Ikon Besar */}
+        <div className="mb-4">
+          {isError ? (
+            <FaExclamationCircle className="text-6xl mx-auto text-red-500" />
+          ) : (
+            <FaCheckCircle className="text-6xl mx-auto text-green-500" />
+          )}
+        </div>
+        {/* Pesan */}
+        <p className="text-base font-light">{message}</p>
+      </div>
+    </div>,
+    document.body // Tempatkan notifikasi di dalam body
+  );
+};
 
 const AddPelanggan = () => {
   const [formData, setFormData] = useState<PelangganInput>({
@@ -52,6 +90,9 @@ const AddPelanggan = () => {
         pelanggan_notelp: "",
         pelanggan_email: "",
       });
+
+      // Hilangkan notifikasi setelah 2 detik
+      setTimeout(() => setMessage(null), 2000);
     } catch (error) {
       let errorMessage = "Terjadi kesalahan yang tidak diketahui.";
       if (error instanceof Error) {
@@ -66,6 +107,9 @@ const AddPelanggan = () => {
       }
       setMessage(errorMessage);
       setIsError(true);
+
+      // Hilangkan notifikasi setelah 2 detik
+      setTimeout(() => setMessage(null), 2000);
     }
   };
 
@@ -137,14 +181,19 @@ const AddPelanggan = () => {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-primary w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-ou">Simpan Data</button>
+          <button type="submit" className="btn btn-primary w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-ou">
+            Simpan Data
+          </button>
         </div>
       </form>
 
+      {/* Render Notifikasi (Portal) */}
       {message && (
-        <div className={`alert mt-6 ${isError ? "alert-error" : "alert-success"} w-full max-w-lg`}>
-          {message}
-        </div>
+        <Notification
+          message={message}
+          isError={isError}
+          onClose={() => setMessage(null)}
+        />
       )}
     </div>
   );

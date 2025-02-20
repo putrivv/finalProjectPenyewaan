@@ -1,7 +1,45 @@
 "use client";
 import React, { useState } from "react";
+import ReactDOM from "react-dom";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa"; // Import ikon dari react-icons
 import { addPenyewaan } from "@/app/utils/api"; // Import fungsi addPenyewaan
 import { Penyewaan } from "@/app/(loggedin)/Admin/SewaAlat/penyewaan.type"; // Import tipe Penyewaan
+
+// Komponen Notifikasi (Portal)
+const Notification = ({
+  message,
+  isError,
+  onClose,
+}: {
+  message: string;
+  isError: boolean;
+  onClose: () => void;
+}) => {
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      {/* Background Blur */}
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      {/* Notifikasi Box */}
+      <div
+        className={`relative p-8 rounded-2xl shadow-lg text-center ${
+          isError ? "bg-red-50 text-red-500" : "bg-gray-50 text-green-500"
+        }`}
+      >
+        {/* Ikon Besar */}
+        <div className="mb-4">
+          {isError ? (
+            <FaExclamationCircle className="text-6xl mx-auto text-red-500" />
+          ) : (
+            <FaCheckCircle className="text-6xl mx-auto text-green-500" />
+          )}
+        </div>
+        {/* Pesan */}
+        <p className="text-base font-light">{message}</p>
+      </div>
+    </div>,
+    document.body // Tempatkan notifikasi di dalam body
+  );
+};
 
 const AddPenyewaanForm = () => {
   const [formData, setFormData] = useState<Partial<Penyewaan>>({
@@ -12,7 +50,10 @@ const AddPenyewaanForm = () => {
     penyewaan_sttskembali: "Belum Kembali",
     penyewaan_totalharga: 0,
   });
+
+  // State untuk menampilkan pesan feedback
   const [message, setMessage] = useState<string | null>(null);
+  const [isError, setIsError] = useState(false);
 
   // Handler untuk mengubah state saat input berubah
   const handleChange = (
@@ -35,8 +76,11 @@ const AddPenyewaanForm = () => {
       // Kirim data ke API menggunakan fungsi addPenyewaan
       const result = await addPenyewaan(formData);
       console.log("Respon dari server:", result);
+
       // Tampilkan pesan sukses
       setMessage("Data penyewaan berhasil disimpan!");
+      setIsError(false);
+
       // Reset form setelah berhasil
       setFormData({
         penyewaan_pelanggan_id: 0,
@@ -46,6 +90,9 @@ const AddPenyewaanForm = () => {
         penyewaan_sttskembali: "Belum Kembali",
         penyewaan_totalharga: 0,
       });
+
+      // Hilangkan notifikasi setelah 2 detik
+      setTimeout(() => setMessage(null), 2000);
     } catch (error) {
       console.error("Error caught:", error);
       let errorMessage = "Terjadi kesalahan yang tidak diketahui";
@@ -53,6 +100,10 @@ const AddPenyewaanForm = () => {
         errorMessage = `Terjadi kesalahan: ${error.message}`;
       }
       setMessage(errorMessage);
+      setIsError(true);
+
+      // Hilangkan notifikasi setelah 2 detik
+      setTimeout(() => setMessage(null), 2000);
     }
   };
 
@@ -146,9 +197,13 @@ const AddPenyewaanForm = () => {
         </button>
       </form>
 
-      {/* Pesan Feedback */}
+      {/* Render Notifikasi (Portal) */}
       {message && (
-        <p className="mt-4 text-center text-sm text-[#050315]">{message}</p>
+        <Notification
+          message={message}
+          isError={isError}
+          onClose={() => setMessage(null)}
+        />
       )}
     </div>
   );

@@ -10,6 +10,7 @@ export default function ListPelangganPage() {
   const [pelanggan, setPelanggan] = useState<Pelanggan[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchPelanggan = async () => {
@@ -38,17 +39,18 @@ export default function ListPelangganPage() {
     fetchPelanggan();
   }, []);
 
-  const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm(
-      "Apakah Anda yakin ingin menghapus pelanggan ini?"
-    );
-    if (confirmDelete) {
-      try {
-        await deletePelanggan(id);
-        setPelanggan(pelanggan.filter((item) => item.pelanggan_id !== id));
-      } catch (error) {
-        console.error("Gagal menghapus pelanggan:", error);
-      }
+  const handleDelete = async () => {
+    if (deleteId === null) return;
+    try {
+      await deletePelanggan(deleteId);
+      setPelanggan((prev) =>
+        prev.filter((item) => item.pelanggan_id !== deleteId)
+      );
+      alert("Pelanggan berhasil dihapus!");
+    } catch (error) {
+      alert("Gagal menghapus pelanggan. Pastikan Anda memiliki izin.");
+    } finally {
+      setDeleteId(null);
     }
   };
 
@@ -127,7 +129,7 @@ export default function ListPelangganPage() {
                       <FaTrash
                         className="text-red-500 cursor-pointer"
                         size={18}
-                        onClick={() => handleDelete(item.pelanggan_id)}
+                        onClick={() => setDeleteId(item.pelanggan_id)}
                       />
                     </td>
                   </tr>
@@ -141,6 +143,25 @@ export default function ListPelangganPage() {
               )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {deleteId !== null && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded shadow-md">
+            <p>Apakah Anda yakin ingin menghapus pelanggan ini?</p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                className="btn btn-secondary"
+                onClick={() => setDeleteId(null)}
+              >
+                Batal
+              </button>
+              <button className="btn btn-danger" onClick={handleDelete}>
+                Hapus
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -1,8 +1,48 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import { useParams, useRouter } from "next/navigation";
 import { getPelangganById, updatePelanggan } from "@/app/utils/api";
 import { PelangganInput } from "@/app/(loggedin)/Admin/AddPelanggan/addpelanggan.type";
+
+// Komponen Notifikasi (Portal)
+const Notification = ({
+  message,
+  isError,
+  onClose,
+}: {
+  message: string;
+  isError: boolean;
+  onClose: () => void;
+}) => {
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+      <div
+        className={`relative p-8 rounded-2xl shadow-lg text-center ${
+          isError ? "bg-red-50 text-red-500" : "bg-gray-50 text-green-500"
+        }`}
+      >
+        <div className="mb-4">
+          {isError ? (
+            <FaExclamationCircle className="text-6xl mx-auto text-red-500" />
+          ) : (
+            <FaCheckCircle className="text-6xl mx-auto text-green-500" />
+          )}
+        </div>
+        <p className="text-base font-light">{message}</p>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          &times;
+        </button>
+      </div>
+    </div>,
+    document.body
+  );
+};
 
 const EditPelanggan = () => {
   const { id } = useParams();
@@ -57,11 +97,22 @@ const EditPelanggan = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">Edit Pelanggan</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md max-w-lg mx-auto">
+    <div className="container mx-auto p-4">
+      {/* Tampilkan Notifikasi */}
+      {message && (
+        <Notification
+          message={message}
+          isError={isError}
+          onClose={() => setMessage(null)}
+        />
+      )}
+
+      <h1 className="text-3xl font-bold mb-6">Edit Pelanggan</h1>
+      <form onSubmit={handleSubmit} className="rounded-lg max-w-lg">
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Nama Pelanggan</label>
+          <label className="block text-sm font-medium mb-2">
+            Nama Pelanggan
+          </label>
           <input
             type="text"
             name="pelanggan_nama"
@@ -72,7 +123,9 @@ const EditPelanggan = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Alamat Pelanggan</label>
+          <label className="block text-sm font-medium mb-2">
+            Alamat Pelanggan
+          </label>
           <textarea
             name="pelanggan_alamat"
             value={formData.pelanggan_alamat}
@@ -82,7 +135,9 @@ const EditPelanggan = () => {
           ></textarea>
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Nomor Telepon</label>
+          <label className="block text-sm font-medium mb-2">
+            Nomor Telepon
+          </label>
           <input
             type="text"
             name="pelanggan_notelp"
@@ -93,7 +148,9 @@ const EditPelanggan = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-sm font-medium mb-2">Email Pelanggan</label>
+          <label className="block text-sm font-medium mb-2">
+            Email Pelanggan
+          </label>
           <input
             type="email"
             name="pelanggan_email"
@@ -104,14 +161,14 @@ const EditPelanggan = () => {
           />
         </div>
         <div className="flex justify-end">
-          <button type="submit" className="btn btn-primary w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-ou">Perbarui data</button>
+          <button
+            type="submit"
+            className="btn btn-primary w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-out"
+          >
+            Perbarui Data
+          </button>
         </div>
       </form>
-      {message && (
-        <div className={`alert mt-6 ${isError ? "alert-error" : "alert-success"} max-w-lg mx-auto`}>
-          {message}
-        </div>
-      )}
     </div>
   );
 };
