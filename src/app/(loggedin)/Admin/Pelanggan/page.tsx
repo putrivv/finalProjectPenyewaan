@@ -83,7 +83,7 @@ export default function ListPelangganPage() {
       {error && <p className="text-red-500">{error}</p>}
 
       {!loading && !error && (
-        <div className="overflow-x-auto text-sm">
+        <div className="overflow-x-auto text-xs">
           <table className="table-auto w-full border-collapse border border-gray-300 bg-white shadow-md rounded-lg">
             <thead className="bg-green-100">
               <tr className="text-center">

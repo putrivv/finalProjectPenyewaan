@@ -137,7 +137,7 @@ const AddPelanggan = () => {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-primary">Simpan</button>
+          <button type="submit" className="btn btn-primary w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-ou">Simpan Data</button>
         </div>
       </form>
 

@@ -113,23 +113,22 @@ export default function RentalListPage() {
   );
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold">Daftar Alat</h1>
-
-      {/* Search Bar and Button Container */}
-      <div className="flex justify-between items-center mt-4">
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Daftar Alat</h1>
+      <hr className="border-t-2 border-[#4ac786] mb-4" />
+      <div className="flex items-center justify-between mb-4">
         {/* Search Bar */}
         <input
           type="text"
           placeholder="Cari barang..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full max-w-md p-3 rounded-md shadow-sm focus:ring-2 focus:ring-green-200"
         />
         {/* Button Tambah Alat */}
         <Link href="/Admin/AddAlat">
-          <button className="btn btn-primary flex items-center gap-2">
-            <FaPlus /> Tambah Alat
+          <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-md shadow-md hover:shadow-lg transition duration-300">
+            <FaPlus className="text-xs" /> Tambah Alat
           </button>
         </Link>
       </div>
@@ -145,67 +144,71 @@ export default function RentalListPage() {
 
       {/* Data table */}
       {!loading && !error && (
-        <table className="table table-zebra w-full mt-4">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nama Alat</th>
-              <th>Kategori</th>
-              <th>Harga (IDR)</th>
-              <th>Stok</th>
-              <th>Status</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredItems.length > 0 ? (
-              filteredItems.map((item) => (
-                <tr key={item.alat_id}>
-                  <td>{item.alat_id}</td>
-                  <td>{item.alat_nama}</td>
-                  <td>{item.kategori?.kategori_nama || "Tidak Diketahui"}</td>
-                  <td>{item.alat_hargaperhari.toLocaleString()}</td>
-                  <td>{item.alat_stok}</td>
-                  <td>
-                    <span
-                      className={`badge ${
-                        item.alat_stok > 0 ? "badge-success" : "badge-error"
-                      }`}
-                    >
-                      {item.alat_stok > 0 ? "Tersedia" : "Tidak Tersedia"}
-                    </span>
-                  </td>
-                  <td>
-                    {/* Action Buttons */}
-                    <div className="flex gap-2">
-                      {/* Edit Button */}
+        <div className="overflow-x-auto text-xs">
+          <table className="table-auto w-full border-collapse border border-gray-300 bg-white shadow-md rounded-lg">
+            <thead className="bg-green-100">
+              <tr className="text-center">
+                <th className="p-3 border">ID</th>
+                <th className="p-3 border">Nama Alat</th>
+                <th className="p-3 border">Kategori</th>
+                <th className="p-3 border">Harga (IDR)</th>
+                <th className="p-3 border">Stok</th>
+                <th className="p-3 border">Status</th>
+                <th className="p-3 border">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredItems.length > 0 ? (
+                filteredItems.map((item) => (
+                  <tr
+                    key={item.alat_id}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    <td className="p-3 border text-center">{item.alat_id}</td>
+                    <td className="p-3 border">{item.alat_nama}</td>
+                    <td className="p-3 border">
+                      {item.kategori?.kategori_nama || "Tidak Diketahui"}
+                    </td>
+                    <td className="p-3 border">
+                      {item.alat_hargaperhari.toLocaleString()}
+                    </td>
+                    <td className="p-3 border">{item.alat_stok}</td>
+                    <td className="p-3 border text-center">
+                      <span
+                        className={`badge ${
+                          item.alat_stok > 0 ? "badge-success" : "badge-error"
+                        }`}
+                      >
+                        {item.alat_stok > 0 ? "Tersedia" : "Tidak Tersedia"}
+                      </span>
+                    </td>
+                    <td className="p-3 border text-center flex justify-center gap-3">
                       <Link href={`/Admin/Editalat/${item.alat_id}`}>
-                        <button className="btn btn-sm btn-primary">
-                          <FaEdit className="text-sm" />
-                        </button>
+                        <FaEdit
+                          className="text-yellow-500 cursor-pointer"
+                          size={18}
+                        />
                       </Link>
-                      {/* Delete Button */}
-                      <button
-                        className="btn btn-sm btn-error"
+                      <FaTrash
+                        className="text-red-500 cursor-pointer"
+                        size={18}
                         onClick={() =>
                           setDeleteModal({ isOpen: true, id: item.alat_id })
                         }
-                      >
-                        <FaTrash className="text-sm" />
-                      </button>
-                    </div>
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="p-4 text-center text-gray-500">
+                    Tidak ada barang ditemukan
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} className="text-center">
-                  Tidak ada barang ditemukan
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* Render Modal Konfirmasi (Portal) */}

@@ -57,8 +57,8 @@ const AddPenyewaanForm = () => {
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold mb-4 text-[#050315] text-center">
+    <div className="p-6 max-w-md">
+      <h1 className="text-3xl font-bold mb-4 text-[#050315]">
         Form Penyewaan Alat
       </h1>
       <hr className="border-t-2 border-[#d1fae5] mb-6" />
@@ -142,7 +142,7 @@ const AddPenyewaanForm = () => {
           type="submit"
           className="w-full px-4 py-2 bg-[#d1fae5] text-[#050315] font-medium rounded-md hover:bg-[#7AB2D3] hover:text-white transition duration-300 ease-in-out"
         >
-          Simpan
+          Simpan Data
         </button>
       </form>
 
