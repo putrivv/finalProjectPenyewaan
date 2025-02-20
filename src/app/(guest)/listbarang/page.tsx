@@ -11,36 +11,34 @@ interface Kategori {
 const BarangCard: React.FC<ListBarang> = React.memo(
   ({ alat_id, alat_nama, alat_deskripsi, alat_stok, alat_hargaperhari }) => {
     return (
-      <div className="relative bg-white border border-gray-200 shadow-md rounded-xl flex flex-col w-[260px] h-auto hover:shadow-xl hover:scale-105 transition-all duration-300 p-5 overflow-hidden">
-        {/* Nama Barang */}
-        <h2 className="text-lg font-semibold text-gray-900 truncate">{alat_nama}</h2>
-
-        {/* Deskripsi */}
-        <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-          {alat_deskripsi ?? "Deskripsi tidak tersedia"}
-        </p>
-
-        {/* Footer: Stok & Harga */}
-        <div className="mt-4 flex flex-col gap-1 text-gray-700 text-sm">
-          <p>
-            <span className="font-medium">Stok:</span> {alat_stok ?? "Tidak tersedia"}
+      <div className="card w-64 bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300">
+        {/* Card Body */}
+        <div className="card-body">
+          {/* Nama Barang */}
+          <h2 className="card-title text-lg font-semibold text-gray-900 truncate">
+            {alat_nama}
+          </h2>
+          {/* Deskripsi */}
+          <p className="text-sm text-gray-600 line-clamp-2">
+            {alat_deskripsi ?? "Deskripsi tidak tersedia"}
           </p>
-          <p>
-            <span className="font-medium">Harga per hari:</span>{" "}
-            <span className="text-emerald-600 font-semibold">
-              Rp {alat_hargaperhari ?? "Tidak tersedia"}
-            </span>
-          </p>
+          {/* Footer: Stok & Harga */}
+          <div className="mt-4 flex flex-col gap-1 text-gray-700 text-sm">
+            <p>
+              <span className="font-medium">Stok:</span> {alat_stok ?? "Tidak tersedia"}
+            </p>
+            <p>
+              <span className="font-medium">Harga per hari:</span>{" "}
+              <span className="text-emerald-600 font-semibold">
+                Rp {alat_hargaperhari ?? "Tidak tersedia"}
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     );
   }
 );
-
-
-
-
-
 
 const BarangList: React.FC = () => {
   const [barang, setBarang] = useState<ListBarang[]>([]);
@@ -98,47 +96,28 @@ const BarangList: React.FC = () => {
   return (
     <div className="flex flex-col items-center p-6 bg-gradient-to-r from-green-100 to-blue-100 min-h-screen">
       <div className="mb-6 w-full flex justify-end">
-        <div className="dropdown dropdown-left">
-          <div tabIndex={0} role="button" className="btn m-1 bg-white">
-            Kategori
-          </div>
-          <ul
-            tabIndex={0}
-            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
-          >
-            <li>
-              <a onClick={() => setKategori("")}>Semua Kategori</a>
-            </li>
-            {kategoriList.map((item) => (
-              <li key={item.id}>
-                <a onClick={() => setKategori(item.nama)}>{item.nama}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        
       </div>
 
       {/* Loading Animation */}
       {(loadingBarang || loadingKategori) && (
         <div className="flex justify-center items-center min-h-screen">
-          <span
-            className="loading loading-bars loading-xs"
-            aria-label="Loading"
-          ></span>
+          <span className="loading loading-bars loading-lg" aria-label="Loading"></span>
         </div>
       )}
+
       {error && <p className="text-red-600">{error}</p>}
 
-      <div className="grid grid-cols-4 gap-4 justify-items-center">
-        {barang.length > 0
-          ? barang.map((item, index) => (
-              <BarangCard key={item.alat_id ?? index} {...item} />
-            ))
-          : !loadingBarang && (
-              <p className="text-gray-500 text-center w-full">
-                Tidak ada barang tersedia.
-              </p>
-            )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
+        {barang.length > 0 ? (
+          barang.map((item, index) => (
+            <BarangCard key={item.alat_id ?? index} {...item} />
+          ))
+        ) : !loadingBarang && (
+          <p className="text-gray-500 text-center w-full">
+            Tidak ada barang tersedia.
+          </p>
+        )}
       </div>
     </div>
   );

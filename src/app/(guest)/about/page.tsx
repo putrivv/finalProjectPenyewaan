@@ -11,8 +11,8 @@ const About = () => {
           <p className="text-lg mt-4 max-w-2xl mx-auto">
             Kami adalah platform persewaan yang menyediakan berbagai kebutuhan
             Anda, mulai dari smartphone, kamera profesional, peralatan pendakian
-            gunung, hingga kendaraan off-road. Semua tersedia dengan harga terjangkau
-            dan proses yang mudah.
+            gunung, hingga kendaraan off-road. Semua tersedia dengan harga
+            terjangkau dan proses yang mudah.
           </p>
         </div>
 
@@ -64,14 +64,14 @@ const About = () => {
               Membantu Petualangan dan Kreativitas dengan Layanan Persewaan
             </h3>
             <p className="mt-4">
-              Kami percaya bahwa setiap orang harus memiliki akses mudah terhadap
-              alat yang mereka butuhkan tanpa harus membelinya. Dengan semangat
-              berbagi dan inovasi, kami hadir untuk mendukung petualangan dan
-              kreativitas Anda.
+              Kami percaya bahwa setiap orang harus memiliki akses mudah
+              terhadap alat yang mereka butuhkan tanpa harus membelinya. Dengan
+              semangat berbagi dan inovasi, kami hadir untuk mendukung
+              petualangan dan kreativitas Anda.
             </p>
             <blockquote className="mt-4 p-4 border-l-4 border-[#4A628A] bg-[#B9E5E8] italic">
-              "Memberikan solusi sewa yang praktis, efisien, dan terjangkau untuk
-              semua orang."
+              "Memberikan solusi sewa yang praktis, efisien, dan terjangkau
+              untuk semua orang."
             </blockquote>
           </div>
         </div>
@@ -81,12 +81,27 @@ const About = () => {
           <h3 className="text-3xl font-bold">Jelajahi Peralatan Persewaan</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             {[
-              { title: "Smartphone", desc: "Sewa smartphone terbaru untuk kebutuhan komunikasi dan dokumentasi." },
-              { title: "Kamera Profesional", desc: "Temukan kamera DSLR, mirrorless, dan aksesoris fotografi lainnya." },
-              { title: "Peralatan Pendakian", desc: "Sewa tenda, sleeping bag, kompor portable, dan alat pendakian lainnya." },
-              { title: "Kendaraan Off-Road", desc: "Sewa mobil off-road, motor trail, dan kendaraan lainnya untuk petualangan Anda." },
+              {
+                title: "Smartphone",
+                desc: "Sewa smartphone terbaru untuk kebutuhan komunikasi dan dokumentasi.",
+              },
+              {
+                title: "Kamera Profesional",
+                desc: "Temukan kamera DSLR, mirrorless, dan aksesoris fotografi lainnya.",
+              },
+              {
+                title: "Peralatan Pendakian",
+                desc: "Sewa tenda, sleeping bag, kompor portable, dan alat pendakian lainnya.",
+              },
+              {
+                title: "Kendaraan Off-Road",
+                desc: "Sewa mobil off-road, motor trail, dan kendaraan lainnya untuk petualangan Anda.",
+              },
             ].map(({ title, desc }, index) => (
-              <div key={index} className="p-6 bg-[#B9E5E8] rounded-lg shadow-md">
+              <div
+                key={index}
+                className="p-6 bg-[#B9E5E8] rounded-lg shadow-md"
+              >
                 <h4 className="text-xl font-semibold">{title}</h4>
                 <p className="mt-2">{desc}</p>
               </div>

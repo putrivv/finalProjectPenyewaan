@@ -1,7 +1,7 @@
-"use client"; // Pastikan ini ada di bagian atas file
+"use client";
 import Link from "next/link";
 import React, { useState } from "react";
-import { forgotPassword } from "@/app/utils/api"; // Sesuaikan path ke file api.ts
+import { forgotPassword } from "@/app/utils/api";
 
 const Password = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +28,9 @@ const Password = () => {
     <div className="flex min-h-screen items-center justify-center bg-[#DFF2EB]">
       <div className="card w-96 bg-white shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-center mx-auto text-[#050315]">Reset Password</h2>
+          <h2 className="card-title text-center mx-auto text-[#050315]">
+            Reset Password
+          </h2>
           <form onSubmit={handleSubmit}>
             <div className="form-control">
               <label className="label">
@@ -54,9 +56,7 @@ const Password = () => {
             </div>
           </form>
           {message && (
-            <p className="text-center text-sm mt-2 text-[#050315]">
-              {message}
-            </p>
+            <p className="text-center text-sm mt-2 text-[#050315]">{message}</p>
           )}
           <p className="text-center text-sm mt-2 text-[#050315]">
             <Link href="/login" className="text-[#7AB2D3] hover:text-[#4A628A]">

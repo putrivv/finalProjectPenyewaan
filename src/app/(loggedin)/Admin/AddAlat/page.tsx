@@ -6,7 +6,7 @@ import { addAlat, getKategori } from "@/app/utils/api"; // Import fungsi addAlat
 import { Alat } from "./addalat.type"; // Import tipe Alat
 import { Kategori } from "../Kategori/kategori.type"; // Import tipe Kategori
 
-// Komponen Notifikasi (Portal)
+
 const Notification = ({
   message,
   isError,

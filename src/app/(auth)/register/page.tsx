@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import ReactDOM from "react-dom"; // Untuk React Portal
+import ReactDOM from "react-dom";
 import { registerUser } from "@/app/utils/api";
 
 export default function RegisterPage() {
@@ -46,7 +46,9 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#DFF2EB]">
       <div className="card w-96 bg-white shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-center mx-auto text-[#050315]">Daftar</h2>
+          <h2 className="card-title text-center mx-auto text-[#050315]">
+            Daftar
+          </h2>
           {error && <p className="text-red-500 text-center">{error}</p>}
           <form onSubmit={handleSubmit}>
             {/* Input untuk admin_username */}

@@ -1,4 +1,4 @@
-"use client"; // Wajib karena ada useState & React Query
+"use client";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
